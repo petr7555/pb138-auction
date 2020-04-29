@@ -1,0 +1,10 @@
+CREATE TABLE auctions (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    description VARCHAR NOT NULL,
+    min_amount BIGINT NOT NULL,
+    instant_buyout BIGINT,
+    until TIMESTAMP NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
