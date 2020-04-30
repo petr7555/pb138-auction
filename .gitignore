@@ -1,0 +1,11 @@
+# Compiled rust binaries
+src/auction-api/target/
+
+# Rust package manager lock
+**/Cargo.lock
+
+# Rust backup files
+**/*.rs.bk
+
+# JetBrains suite IDE files
+**/.idea
