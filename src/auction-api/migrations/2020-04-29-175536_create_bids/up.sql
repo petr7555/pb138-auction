@@ -1,5 +1,5 @@
 CREATE TABLE bids(
-    id BIGINT PRIMARY KEY,
+    id BIGINT PRIMARY KEY NOT NULL,
     user_id BIGINT NOT NULL,
     auction_id BIGINT NOT NULL,
     amount BIGINT NOT NULL,

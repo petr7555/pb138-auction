@@ -1,6 +1,7 @@
 table! {
     auctions (id) {
-        id -> Nullable<BigInt>,
+        id -> BigInt,
+        user_id -> BigInt,
         name -> Text,
         description -> Text,
         min_amount -> BigInt,
@@ -13,7 +14,7 @@ table! {
 
 table! {
     bids (id) {
-        id -> Nullable<BigInt>,
+        id -> BigInt,
         user_id -> BigInt,
         auction_id -> BigInt,
         amount -> BigInt,
@@ -24,7 +25,7 @@ table! {
 
 table! {
     users (id) {
-        id -> Nullable<BigInt>,
+        id -> BigInt,
         name -> Text,
         password -> Text,
         active -> Bool,
@@ -32,6 +33,7 @@ table! {
     }
 }
 
+joinable!(auctions -> users (user_id));
 joinable!(bids -> auctions (auction_id));
 joinable!(bids -> users (user_id));
 
