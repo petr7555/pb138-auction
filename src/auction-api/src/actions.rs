@@ -17,8 +17,13 @@ pub fn find_user_by_id(user_id: i64, conn: &PgConnection)
 pub fn insert_new_user(new_user: &NewUser, conn: &PgConnection)
                        ->  Result<models::User, diesel::result::Error> {
     use crate::schema::users::dsl::*;
-
-
+    //use diesel::dsl::select;
+    //use diesel::dsl::exists;
+    //let user_exists = select(exists(users.filter(name.eq(&new_user.name)))).get_result(conn);
+    //if Ok(true) == user_exists {
+    //   return  Err(diesel::result::Error::CustomError);
+    //}
+                
     let inserted_user = diesel::insert_into(users)
         .values(new_user)
         .get_result::<User>(conn)?;

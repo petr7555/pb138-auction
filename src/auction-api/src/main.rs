@@ -3,7 +3,7 @@ extern crate diesel;
 
 use diesel::{PgConnection, r2d2};
 use diesel::r2d2::ConnectionManager;
-use actix_web::{web, HttpResponse, HttpServer, middleware, get, post, App};
+use actix_web::{web, HttpResponse, HttpServer, middleware, get, post, App, error::BlockingError};
 
 mod actions;
 mod models;
@@ -39,14 +39,20 @@ async fn register_user(pool: web::Data<DbPool>, form: web::Json<models::NewUser>
 
     let new_user = form.into_inner();
 
-    let user = web::block(move || actions::insert_new_user(&new_user, &conn))
-        .await
-        .map_err(|e| {
-            eprintln!("{}", e);
-            HttpResponse::InternalServerError().finish()
-        })?;
+    use diesel::result::Error::DatabaseError;
+    use diesel::result::DatabaseErrorKind::UniqueViolation;
 
-    Ok(HttpResponse::Ok().json(user))
+    let res = web::block(move || actions::insert_new_user(&new_user, &conn)).await;
+    match res {
+        Ok(user) => Ok(HttpResponse::Ok().json(user)),
+        Err(err) => match err {
+            BlockingError::Error(diesel_error) => match diesel_error {
+                DatabaseError(UniqueViolation, _msg,) => Ok(HttpResponse::Conflict().header("Content-Type", "application/json").body("{\"error\": \"name is taken\"}")),
+                _ => Ok(HttpResponse::InternalServerError().finish())
+            },
+            BlockingError::Canceled => Ok(HttpResponse::InternalServerError().finish())
+        }
+    }
 }
 
 #[actix_rt::main]
