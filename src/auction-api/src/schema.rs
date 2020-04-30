@@ -1,9 +1,9 @@
 table! {
     auctions (id) {
-        id -> BigInt,
-        user_id -> BigInt,
-        name -> Text,
-        description -> Text,
+        id -> Int8,
+        user_id -> Int8,
+        name -> Varchar,
+        description -> Varchar,
         until -> Timestamptz,
         active -> Bool,
         created_at -> Timestamp,
@@ -12,10 +12,10 @@ table! {
 
 table! {
     bids (id) {
-        id -> BigInt,
-        user_id -> BigInt,
-        auction_id -> BigInt,
-        amount -> BigInt,
+        id -> Int8,
+        user_id -> Int8,
+        auction_id -> Int8,
+        amount -> Int8,
         active -> Bool,
         created_at -> Timestamp,
     }
@@ -23,9 +23,9 @@ table! {
 
 table! {
     users (id) {
-        id -> BigInt,
-        name -> Text,
-        password -> Text,
+        id -> Int8,
+        name -> Varchar,
+        password -> Varchar,
         active -> Bool,
         created_at -> Timestamp,
     }
