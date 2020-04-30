@@ -4,9 +4,7 @@ table! {
         user_id -> BigInt,
         name -> Text,
         description -> Text,
-        min_amount -> BigInt,
-        instant_buyout -> Nullable<BigInt>,
-        until -> Timestamp,
+        until -> Timestamptz,
         active -> Bool,
         created_at -> Timestamp,
     }

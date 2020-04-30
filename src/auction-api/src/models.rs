@@ -1,7 +1,7 @@
 use std::time::SystemTime;
-use chrono::naive::NaiveDateTime;
 use serde::{Serialize, Deserialize};
 use super::schema::{users, bids, auctions};
+use chrono::{DateTime, Utc};
 
 #[derive(Serialize, Queryable)]
 pub struct User {
@@ -14,10 +14,9 @@ pub struct User {
 
 #[derive(Deserialize, Insertable)]
 #[table_name = "users"]
-pub struct NewUser<'a> {
-    name: &'a str,
-    password: &'a str,
-    active: bool,
+pub struct NewUser {
+    name: String,
+    password: String,
 }
 
 #[derive(Serialize, Queryable, Associations)]
@@ -38,7 +37,6 @@ pub struct NewBid {
     user_id: i64,
     auction_id: i64,
     amount: i64,
-    active: bool,
 }
 
 #[derive(Serialize, Queryable)]
@@ -46,20 +44,15 @@ pub struct Auction {
     id: i64,
     name: String,
     description: String,
-    min_amount: i64,
-    instant_buyout: Option<i64>,
-    until: NaiveDateTime,
+    until: DateTime<Utc>,
     active: bool,
     created_at: SystemTime,
 }
 
 #[derive(Deserialize, Insertable)]
 #[table_name = "auctions"]
-pub struct NewAuction<'a> {
-    name: &'a str,
-    description: &'a str,
-    min_amount: i64,
-    instant_buyout: Option<i64>,
-    until: NaiveDateTime,
-    active: bool,
+pub struct NewAuction {
+    name: String,
+    description: String,
+    until: DateTime<Utc>,
 }
