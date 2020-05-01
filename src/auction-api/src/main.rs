@@ -47,7 +47,7 @@ async fn register_user(pool: web::Data<DbPool>, form: web::Json<models::NewUser>
         Ok(user) => Ok(HttpResponse::Ok().json(user)),
         Err(err) => match err {
             BlockingError::Error(diesel_error) => match diesel_error {
-                DatabaseError(UniqueViolation, _msg,) => Ok(HttpResponse::Conflict().header("Content-Type", "application/json").body("{\"error\": \"name is taken\"}")),
+                DatabaseError(UniqueViolation, _msg,) => Ok(HttpResponse::Conflict().header("Content-Type", "application/json").body(r#"{"error": "name is taken"}"#)),
                 _ => Ok(HttpResponse::InternalServerError().finish())
             },
             BlockingError::Canceled => Ok(HttpResponse::InternalServerError().finish())
