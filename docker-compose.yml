@@ -9,6 +9,8 @@ services:
         ports:
             - 8080:8080
         restart: always
+        environment:
+            - DATABASE_URL=postgres://postgres:password@db/postgres
 
     auction-frontend:
         depends_on:

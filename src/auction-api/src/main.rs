@@ -65,7 +65,7 @@ async fn main() -> std::io::Result<()> {
         .build(manager)
         .expect("Failed to create pool.");
 
-    let bind = "127.0.0.1:8080";
+    let bind = "0.0.0.0:8080";
 
     HttpServer::new(move || {
         App::new()
