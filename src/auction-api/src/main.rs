@@ -71,7 +71,7 @@ async fn main() -> std::io::Result<()> {
         .expect("Failed to create pool.");
     
     let conn = pool.clone().get().expect("Database pool error");
-    embedded_migrations::run(&conn).unwrap();
+    embedded_migrations::run(&conn).expect("Migration init failed");
 
     let bind = "0.0.0.0:8080";
 
