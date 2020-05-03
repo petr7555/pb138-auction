@@ -1,14 +1,19 @@
 #[macro_use]
 extern crate diesel;
 
+#[macro_use]
+extern crate diesel_migrations;
+
 use diesel::{PgConnection, r2d2};
 use diesel::r2d2::ConnectionManager;
+use diesel_migrations::embed_migrations;
 use actix_web::{web, HttpResponse, HttpServer, middleware, get, post, App, error::BlockingError};
 
 mod actions;
 mod models;
 mod schema;
 
+embed_migrations!();
 type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
 #[get("/users/{id}")]
@@ -64,6 +69,9 @@ async fn main() -> std::io::Result<()> {
     let pool = r2d2::Pool::builder()
         .build(manager)
         .expect("Failed to create pool.");
+    
+    let conn = pool.get().expect("Database pool error");
+    embedded_migrations::run(&conn).expect("Migration init failed");
 
     let bind = "0.0.0.0:8080";
 

@@ -1,3 +1,3 @@
 Dockerfile
 target
-!*/*/auction-api
+!target/debug/auction-api
