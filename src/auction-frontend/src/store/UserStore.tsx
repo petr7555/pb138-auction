@@ -6,6 +6,9 @@ export default class UserStore {
     loggedIn = false;
 
     @observable
+    currentPath = "";
+
+    @observable
     count = 0
 
     @action

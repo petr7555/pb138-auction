@@ -1,15 +1,17 @@
-import {useStores} from "../hooks/use-stores";
-import {observer} from "mobx-react-lite";
 import React from "react";
+import {Nav} from "./Nav";
+import {Auctions} from "./Auctions";
+import {MyAuctions} from "./MyAuctions";
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
-export const Main = observer(() => {
-    const {userStore} = useStores()
-
+export const Main = () => {
     return (
-        <>
-            <div>{userStore.count}</div>
-            <button onClick={() => userStore.increment()}>++</button>
-            <button onClick={() => userStore.decrement()}>--</button>
-        </>
+        <Router>
+            <div>
+                <Nav/>
+                <Route path="/auctions" component={Auctions}/>
+                <Route path="/my_auctions" component={MyAuctions}/>
+            </div>
+        </Router>
     )
-})
+}

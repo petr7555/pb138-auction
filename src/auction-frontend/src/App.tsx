@@ -3,8 +3,8 @@ import './App.css';
 import 'antd/dist/antd.css';
 import {Login} from "./components/Login";
 import {useStores} from "./hooks/use-stores";
-import {Main} from "./components/Main";
 import {observer} from "mobx-react-lite";
+import {Main} from "./components/Main";
 
 export const App = observer(() => {
     const {userStore} = useStores();
