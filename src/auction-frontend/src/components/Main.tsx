@@ -9,7 +9,7 @@ export const Main = () => {
         <Router>
             <div>
                 <Nav/>
-                <Route path="/auctions" component={Auctions}/>
+                <Route path={["/auctions", "/"]} exact component={Auctions}/>
                 <Route path="/my_auctions" component={MyAuctions}/>
             </div>
         </Router>

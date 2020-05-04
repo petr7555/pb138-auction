@@ -15,7 +15,7 @@ export const Nav = withRouter((props) => {
     return (
         <div>
             {/* eslint-disable-next-line no-restricted-globals */}
-            <Menu selectedKeys={[location.pathname]} mode="horizontal">
+            <Menu selectedKeys={[location.pathname === "/" ? "/auctions" : location.pathname]} mode="horizontal">
                 <Menu.Item key="/auctions">
                     <Link to="/auctions">
                         <HourglassOutlined/>
