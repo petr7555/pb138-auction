@@ -14,6 +14,18 @@ pub fn find_user_by_id(user_id: i64, conn: &PgConnection)
     Ok(user)
 }
 
+pub fn find_auction_by_id(auction_id: i64, conn: &PgConnection)
+-> Result<Option<models::Auction>, diesel::result::Error> {
+    use crate::schema::auctions::dsl::*;
+
+    let auction = auctions
+        .filter(id.eq(auction_id))
+        .first::<models::Auction>(conn)
+        .optional()?;
+
+    Ok(auction)
+}
+
 pub fn find_user_by_name(user_name: &str, conn: &PgConnection)
 -> Result<Option<models::FullUser>, diesel::result::Error> {
     use crate::schema::users::dsl::*;

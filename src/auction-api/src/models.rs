@@ -42,9 +42,11 @@ pub struct NewBid {
     amount: i64,
 }
 
-#[derive(Serialize, Queryable)]
+#[derive(Serialize, Queryable, Associations)]
+#[belongs_to(User)]
 pub struct Auction {
     id: i64,
+    user_id: i64,
     name: String,
     description: String,
     until: DateTime<Utc>,
