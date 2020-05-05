@@ -7,58 +7,16 @@ extern crate diesel_migrations;
 use diesel::{PgConnection, r2d2};
 use diesel::r2d2::ConnectionManager;
 use diesel_migrations::embed_migrations;
-use actix_web::{web, HttpResponse, HttpServer, middleware, get, post, App, error::BlockingError};
+use actix_web::{HttpServer, middleware, App};
 
 mod actions;
 mod models;
 mod schema;
+mod get;
+mod post;
+mod response;
 
 embed_migrations!();
-type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
-
-#[get("/users/{id}")]
-async fn get_user(pool: web::Data<DbPool>, user_id: web::Path<i64>) -> Result<HttpResponse, actix_web::Error> {
-    let user_id = user_id.into_inner();
-    let conn = pool.get().expect("Database pool error");
-
-    let user = web::block(move || actions::find_user_by_id(user_id, &conn))
-        .await
-        .map_err(|e| {
-            eprintln!("{}", e);
-            HttpResponse::InternalServerError().finish()
-        })?;
-
-    if let Some(user) = user {
-        Ok(HttpResponse::Ok().json(user))
-    } else {
-        let res = HttpResponse::NotFound()
-            .body(format!("No user found with id: {}", user_id));
-        Ok(res)
-    }
-}
-
-#[post("/register")]
-async fn register_user(pool: web::Data<DbPool>, form: web::Json<models::NewUser>)
--> Result<HttpResponse, actix_web::Error> {
-    let conn = pool.get().expect("Database pool error");
-
-    let new_user = form.into_inner();
-
-    use diesel::result::Error::DatabaseError;
-    use diesel::result::DatabaseErrorKind::UniqueViolation;
-
-    let res = web::block(move || actions::insert_new_user(&new_user, &conn)).await;
-    match res {
-        Ok(user) => Ok(HttpResponse::Ok().json(user)),
-        Err(err) => match err {
-            BlockingError::Error(diesel_error) => match diesel_error {
-                DatabaseError(UniqueViolation, _msg,) => Ok(HttpResponse::Conflict().header("Content-Type", "application/json").body(r#"{"error": "name is taken"}"#)),
-                _ => Ok(HttpResponse::InternalServerError().finish())
-            },
-            BlockingError::Canceled => Ok(HttpResponse::InternalServerError().finish())
-        }
-    }
-}
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -79,8 +37,9 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .data(pool.clone())
             .wrap(middleware::Logger::default())
-            .service(get_user)
-            .service(register_user)
+            .service(get::user)
+            .service(post::register_user)
+            .service(post::login_user)
     })
     .bind(&bind)?
     .run()

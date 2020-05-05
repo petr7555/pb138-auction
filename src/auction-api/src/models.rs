@@ -1,21 +1,24 @@
-use std::time::SystemTime;
 use serde::{Serialize, Deserialize};
-use super::schema::{users, bids, auctions};
-use chrono::{DateTime, Utc};
+use crate::schema::{users, bids, auctions};
+use chrono::{DateTime, Utc, NaiveDateTime};
+use getset::Getters;
 
-#[derive(Serialize, Queryable)]
-pub struct User {
+#[derive(Serialize, Queryable, Getters)]
+pub struct FullUser {
     id: i64,
     name: String,
+    #[getset(get = "pub")]
     password: String,
     active: bool,
-    created_at: SystemTime,
+    created_at: NaiveDateTime,
 }
 
-#[derive(Deserialize, Insertable)]
+#[derive(Deserialize, Insertable, Getters, Clone)]
 #[table_name = "users"]
-pub struct NewUser {
+pub struct User {
+    #[getset(get = "pub")]
     name: String,
+    #[getset(get = "pub")]
     password: String,
 }
 
@@ -28,7 +31,7 @@ pub struct Bid {
     auction_id: i64,
     amount: i64,
     active: bool,
-    created_at: SystemTime,
+    created_at: NaiveDateTime,
 }
 
 #[derive(Deserialize, Insertable)]
@@ -46,7 +49,7 @@ pub struct Auction {
     description: String,
     until: DateTime<Utc>,
     active: bool,
-    created_at: SystemTime,
+    created_at: NaiveDateTime,
 }
 
 #[derive(Deserialize, Insertable)]
