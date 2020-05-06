@@ -1,12 +1,21 @@
 import {observer} from "mobx-react-lite";
-import React from "react";
+import React, {useEffect} from "react";
+import {Item} from "./Item";
+import {useStores} from "../hooks/use-stores";
+import AuctionItemEntity from "../entitites/AuctionItemEntity";
 
 export const Auctions = observer(() => {
+    const {auctionsStore} = useStores();
+
+    useEffect(() => {
+        auctionsStore.fetchAuctions();
+    }, [])
+
     return (
         <div>
-            <p>one auction</p>
-            <p>two auction</p>
-            <p>three auction</p>
+            {auctionsStore.auctions.map((auction: AuctionItemEntity) => {
+                return <Item item={auction} key={auction.id}/>
+            })}
         </div>
     )
-})
+});
