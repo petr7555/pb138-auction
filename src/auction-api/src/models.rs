@@ -60,4 +60,5 @@ pub struct NewAuction {
     name: String,
     description: String,
     until: DateTime<Utc>,
+    user_id: i64,
 }

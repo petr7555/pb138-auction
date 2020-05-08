@@ -1,6 +1,6 @@
 use diesel::prelude::*;
 use crate::models;
-use crate::models::{User, FullUser};
+use crate::models::{User, FullUser, NewAuction, Auction};
 
 pub fn find_user_by_id(user_id: i64, conn: &PgConnection)
 -> Result<Option<models::FullUser>, diesel::result::Error> {
@@ -53,4 +53,23 @@ pub fn insert_new_user(new_user: &User, conn: &PgConnection)
         .get_result::<FullUser>(conn)?;
 
     Ok(inserted_user)
+}
+
+pub fn find_all_auctions(conn: &PgConnection) -> Result<Vec<Auction>, diesel::result::Error> {
+    use crate::schema::auctions::dsl::*;
+
+    let auction_vec = auctions.load(conn)?;
+
+    Ok(auction_vec)
+}
+
+pub fn insert_new_auction(new_auction: &NewAuction, conn: &PgConnection)
+-> Result<models::Auction, diesel::result::Error> {
+    use crate::schema::auctions::dsl::*;
+
+    let inserted_auction = diesel::insert_into(auctions)
+    .values(new_auction)
+    .get_result::<Auction>(conn)?;
+
+    Ok(inserted_auction)
 }

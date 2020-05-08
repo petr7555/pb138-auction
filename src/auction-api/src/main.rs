@@ -40,8 +40,10 @@ async fn main() -> std::io::Result<()> {
             .wrap(actix_cors::Cors::default())
             .service(get::user)
             .service(get::auction)
+            .service(get::all_auctions)
             .service(post::register_user)
             .service(post::login_user)
+            .service(post::create_auction)
     })
     .bind(&bind)?
     .run()

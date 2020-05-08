@@ -60,3 +60,21 @@ pub async fn auction(pool: web::Data<DbPool>, auction_id: web::Path<i64>)
         Ok(res)
     }
 }
+
+#[get("/auctions")]
+pub async fn all_auctions(pool: web::Data<DbPool>) -> Result<HttpResponse, actix_web::Error> {
+    let conn = pool.get()
+    .map_err(|e| {
+        eprintln!("{}", e);
+        HttpResponse::InternalServerError().finish()
+    })?;
+
+    let auctions  = web::block(move || actions::find_all_auctions(&conn))
+    .await
+    .map_err(|e| {
+        eprintln!("{}", e);
+        HttpResponse::InternalServerError().finish();
+    })?;
+
+    Ok(HttpResponse::Ok().json(auctions))
+}
