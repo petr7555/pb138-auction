@@ -4,7 +4,7 @@ import {Auctions} from "./Auctions";
 import {MyAuctions} from "./MyAuctions";
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
-export const Main = () => {
+export const Main = (): JSX.Element => {
     return (
         <Router>
             <div>

@@ -12,22 +12,22 @@ export default class UserStore {
     count = 0
 
     @action
-    increment() {
+    increment(): void {
         this.count++
     }
 
     @action
-    decrement() {
+    decrement(): void {
         this.count--
     }
 
     @computed
-    get doubleCount() {
+    get doubleCount(): number {
         return this.count * 2
     }
 
     @action
-    async login(username: string) {
+    async login(username: string): Promise<void> {
         try {
             // const res = await fetch(`http://localhost:8080/login/`);
             // const result = await res.json();

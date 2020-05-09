@@ -8,7 +8,7 @@ export const Nav = withRouter((props) => {
     const {location} = props;
     const {userStore} = useStores();
 
-    const logout = () => {
+    const logout = (): void => {
         userStore.loggedIn = false
     };
 
