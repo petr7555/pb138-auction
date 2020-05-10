@@ -15,11 +15,11 @@ const tailLayout = {
 export const Login = observer(() => {
     const {userStore} = useStores();
 
-    const onFinish = (values: Store) => {
+    const onFinish = (values: Store): void => {
         userStore.login(values.username);
     };
 
-    const onFinishFailed = (errorInfo: any) => {
+    const onFinishFailed = (errorInfo: any): void => {
         console.log('Failed:', errorInfo);
     };
     return (

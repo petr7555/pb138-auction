@@ -1,4 +1,9 @@
 import {storesContext} from "../context";
 import {useContext} from "react";
+import UserStore from "../store/UserStore";
 
-export const useStores = () => useContext(storesContext)
+interface ContextValue{
+    userStore: UserStore;
+}
+
+export const useStores = (): ContextValue => useContext(storesContext)
