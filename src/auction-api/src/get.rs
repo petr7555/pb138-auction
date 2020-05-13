@@ -1,3 +1,4 @@
+use diesel::r2d2::PooledConnection;
 use crate::response::ErrorResponse;
 use actix_web::{get, web, HttpResponse};
 use diesel::r2d2::ConnectionManager;
@@ -21,17 +22,22 @@ fn error_handler<T: Serialize>(
     }
 }
 
+type PoolConnection = PooledConnection<ConnectionManager<PgConnection>>;
+
+fn get_conn(pool: web::Data<DbPool>) -> Result<PoolConnection, HttpResponse> {
+    pool.get().map_err(|e| {
+        eprintln!("{}", e);
+        HttpResponse::InternalServerError().finish()
+    })
+}
+
 #[get("/users/{id}")]
 pub async fn user(
     pool: web::Data<DbPool>,
     user_id: web::Path<i64>,
 ) -> Result<HttpResponse, actix_web::Error> {
+    let conn = get_conn(pool)?;
     let user_id = user_id.into_inner();
-    let conn = pool.get().map_err(|e| {
-        eprintln!("{}", e);
-        HttpResponse::InternalServerError().finish()
-    })?;
-
     let user = web::block(move || actions::find_user_by_id(&conn, user_id))
         .await
         .map_err(|e| {
@@ -47,11 +53,9 @@ pub async fn auction(
     pool: web::Data<DbPool>,
     auction_id: web::Path<i64>,
 ) -> Result<HttpResponse, actix_web::Error> {
+    let conn = get_conn(pool)?;
+
     let auction_id = auction_id.into_inner();
-    let conn = pool.get().map_err(|e| {
-        eprintln!("{}", e);
-        HttpResponse::InternalServerError().finish()
-    })?;
 
     let auction = web::block(move || actions::find_auction_by_id(&conn, auction_id))
         .await
@@ -65,10 +69,7 @@ pub async fn auction(
 
 #[get("/auctions")]
 pub async fn all_auctions(pool: web::Data<DbPool>) -> Result<HttpResponse, actix_web::Error> {
-    let conn = pool.get().map_err(|e| {
-        eprintln!("{}", e);
-        HttpResponse::InternalServerError().finish()
-    })?;
+    let conn = get_conn(pool)?;
 
     let auctions = web::block(move || actions::find_all_auctions(&conn))
         .await
@@ -85,10 +86,7 @@ pub async fn all_auctions_user_created(
     pool: web::Data<DbPool>,
     user_id: web::Path<i64>,
 ) -> Result<HttpResponse, actix_web::Error> {
-    let conn = pool.get().map_err(|e| {
-        eprintln!("{}", e);
-        HttpResponse::InternalServerError().finish()
-    })?;
+    let conn = get_conn(pool)?;
 
     let user_id = user_id.into_inner();
 

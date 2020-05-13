@@ -1,7 +1,7 @@
-use crate::models::{Auction, NewAuction, NewUser};
+use crate::models::{NewAuction, NewUser};
 use crate::response::SuccessResponse;
 use actix_web::{error::BlockingError, post, web, HttpResponse};
-use diesel::r2d2::ConnectionManager;
+use diesel::r2d2::{ConnectionManager, PooledConnection};
 use diesel::{r2d2, PgConnection};
 
 use diesel::result::DatabaseErrorKind::UniqueViolation;
@@ -11,15 +11,21 @@ use crate::actions;
 
 type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
+type PoolConnection = PooledConnection<ConnectionManager<PgConnection>>;
+
+fn get_conn(pool: web::Data<DbPool>) -> Result<PoolConnection, HttpResponse> {
+    pool.get().map_err(|e| {
+        eprintln!("{}", e);
+        HttpResponse::InternalServerError().finish()
+    })
+}
+
 #[post("/register")]
 pub async fn register_user(
     pool: web::Data<DbPool>,
     form: web::Json<NewUser>,
 ) -> Result<HttpResponse, actix_web::Error> {
-    let conn = pool.get().map_err(|e| {
-        eprintln!("{}", e);
-        HttpResponse::InternalServerError().finish()
-    })?;
+    let conn = get_conn(pool)?;
 
     let new_user = form.into_inner();
 
@@ -44,10 +50,7 @@ pub async fn login_user(
     pool: web::Data<DbPool>,
     form: web::Json<NewUser>,
 ) -> Result<HttpResponse, actix_web::Error> {
-    let conn = pool.get().map_err(|e| {
-        eprintln!("{}", e);
-        HttpResponse::InternalServerError().finish()
-    })?;
+    let conn = get_conn(pool)?;
 
     let user = form.into_inner();
     let user_moved = user.clone();
@@ -67,10 +70,7 @@ pub async fn create_auction(
     pool: web::Data<DbPool>,
     form: web::Json<NewAuction>,
 ) -> Result<HttpResponse, actix_web::Error> {
-    let conn = pool.get().map_err(|e| {
-        eprintln!("{}", e);
-        HttpResponse::InternalServerError().finish()
-    })?;
+    let conn = get_conn(pool)?;
 
     let auction = form.into_inner();
 

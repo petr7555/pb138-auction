@@ -4,6 +4,7 @@ use getset::Getters;
 use serde::{Deserialize, Serialize};
 
 #[derive(Identifiable, Serialize, Queryable, Getters)]
+#[serde(rename_all = "camelCase")]
 pub struct User {
     id: i64,
     name: String,
@@ -14,6 +15,7 @@ pub struct User {
 }
 
 #[derive(Deserialize, Insertable, Getters, Clone)]
+#[serde(rename_all = "camelCase")]
 #[table_name = "users"]
 pub struct NewUser {
     #[getset(get = "pub")]
@@ -23,6 +25,7 @@ pub struct NewUser {
 }
 
 #[derive(Identifiable, Serialize, Queryable, Associations)]
+#[serde(rename_all = "camelCase")]
 #[belongs_to(User)]
 #[belongs_to(Auction)]
 pub struct Bid {
@@ -35,6 +38,7 @@ pub struct Bid {
 }
 
 #[derive(Deserialize, Insertable)]
+#[serde(rename_all = "camelCase")]
 #[table_name = "bids"]
 pub struct NewBid {
     user_id: i64,
@@ -43,6 +47,7 @@ pub struct NewBid {
 }
 
 #[derive(Identifiable, Serialize, Queryable, Associations)]
+#[serde(rename_all = "camelCase")]
 #[belongs_to(User)]
 pub struct Auction {
     id: i64,
@@ -55,6 +60,7 @@ pub struct Auction {
 }
 
 #[derive(Deserialize, Insertable)]
+#[serde(rename_all = "camelCase")]
 #[table_name = "auctions"]
 pub struct NewAuction {
     name: String,
