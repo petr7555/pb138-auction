@@ -99,3 +99,22 @@ pub async fn all_auctions_user_created(
 
     Ok(HttpResponse::Ok().json(auctions))
 }
+
+#[get("/auctions-taken-part/user/{id}")]
+pub async fn auctions_taken_part_user(
+    pool: web::Data<DbPool>,
+    user_id: web::Path<i64>,
+) -> Result<HttpResponse, actix_web::Error> {
+    let conn = get_conn(pool)?;
+
+    let user_id = user_id.into_inner();
+
+    let auctions = web::block(move || actions::find_auctions_user_taken_part_in(&conn, user_id))
+    .await
+    .map_err(|e| {
+        eprintln!("{}", e);
+        HttpResponse::InternalServerError().finish();
+    })?;
+
+    Ok(HttpResponse::Ok().json(auctions))
+}

@@ -1,4 +1,4 @@
-use crate::models::{NewAuction, NewUser};
+use crate::models::{NewAuction, NewUser, NewBid};
 use crate::response::SuccessResponse;
 use actix_web::{error::BlockingError, post, web, HttpResponse};
 use diesel::r2d2::{ConnectionManager, PooledConnection};
@@ -75,6 +75,32 @@ pub async fn create_auction(
     let auction = form.into_inner();
 
     let res = web::block(move || actions::insert_new_auction(&conn, &auction)).await;
+
+    match res {
+        Ok(_) => Ok(HttpResponse::Ok().json(SuccessResponse { success: true })),
+        Err(err) => match err {
+            BlockingError::Error(diesel_error) => match diesel_error {
+                DatabaseError(UniqueViolation, _msg) => {
+                    let res = HttpResponse::Conflict().json(SuccessResponse { success: false });
+                    Ok(res)
+                }
+                _ => Ok(HttpResponse::InternalServerError().finish()),
+            },
+            BlockingError::Canceled => Ok(HttpResponse::InternalServerError().finish()),
+        },
+    }
+}
+
+#[post("/bids")]
+pub async fn create_bid(
+    pool: web::Data<DbPool>,
+    form: web::Json<NewBid>,
+) -> Result<HttpResponse, actix_web::Error> {
+    let conn = get_conn(pool)?;
+
+    let bid = form.into_inner();
+
+    let res = web::block(move || actions::insert_new_bid(&conn, &bid)).await;
 
     match res {
         Ok(_) => Ok(HttpResponse::Ok().json(SuccessResponse { success: true })),

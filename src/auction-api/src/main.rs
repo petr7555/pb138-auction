@@ -42,9 +42,11 @@ async fn main() -> std::io::Result<()> {
             .service(get::auction)
             .service(get::all_auctions)
             .service(get::all_auctions_user_created)
+            .service(get::auctions_taken_part_user)
             .service(post::register_user)
             .service(post::login_user)
             .service(post::create_auction)
+            .service(post::create_bid)
     })
     .bind(&bind)?
     .run()
