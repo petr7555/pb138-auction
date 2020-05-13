@@ -4,17 +4,17 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-use diesel::{PgConnection, r2d2};
+use actix_web::{middleware, App, HttpServer};
 use diesel::r2d2::ConnectionManager;
+use diesel::{r2d2, PgConnection};
 use diesel_migrations::embed_migrations;
-use actix_web::{HttpServer, middleware, App};
 
 mod actions;
-mod models;
-mod schema;
 mod get;
+mod models;
 mod post;
 mod response;
+mod schema;
 
 embed_migrations!();
 
@@ -27,7 +27,7 @@ async fn main() -> std::io::Result<()> {
     let pool = r2d2::Pool::builder()
         .build(manager)
         .expect("Failed to create pool.");
-    
+
     let conn = pool.get().expect("Database pool error");
     embedded_migrations::run(&conn).expect("Migration init failed");
 
@@ -41,6 +41,7 @@ async fn main() -> std::io::Result<()> {
             .service(get::user)
             .service(get::auction)
             .service(get::all_auctions)
+            .service(get::all_auctions_user_created)
             .service(post::register_user)
             .service(post::login_user)
             .service(post::create_auction)

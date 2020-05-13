@@ -1,10 +1,10 @@
-use serde::{Serialize, Deserialize};
-use crate::schema::{users, bids, auctions};
-use chrono::{DateTime, Utc, NaiveDateTime};
+use crate::schema::{auctions, bids, users};
+use chrono::{DateTime, NaiveDateTime, Utc};
 use getset::Getters;
+use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Queryable, Getters)]
-pub struct FullUser {
+#[derive(Identifiable, Serialize, Queryable, Getters)]
+pub struct User {
     id: i64,
     name: String,
     #[getset(get = "pub")]
@@ -15,14 +15,14 @@ pub struct FullUser {
 
 #[derive(Deserialize, Insertable, Getters, Clone)]
 #[table_name = "users"]
-pub struct User {
+pub struct NewUser {
     #[getset(get = "pub")]
     name: String,
     #[getset(get = "pub")]
     password: String,
 }
 
-#[derive(Serialize, Queryable, Associations)]
+#[derive(Identifiable, Serialize, Queryable, Associations)]
 #[belongs_to(User)]
 #[belongs_to(Auction)]
 pub struct Bid {
@@ -42,7 +42,7 @@ pub struct NewBid {
     amount: i64,
 }
 
-#[derive(Serialize, Queryable, Associations)]
+#[derive(Identifiable, Serialize, Queryable, Associations)]
 #[belongs_to(User)]
 pub struct Auction {
     id: i64,

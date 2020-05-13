@@ -1,6 +1,6 @@
 use serde::Serialize;
-use std::fmt;
 use std::error;
+use std::fmt;
 
 #[derive(Serialize, Debug)]
 pub struct ErrorResponse {
@@ -9,9 +9,7 @@ pub struct ErrorResponse {
 
 impl ErrorResponse {
     pub fn from(message: String) -> ErrorResponse {
-        ErrorResponse {
-            error: message,
-        }
+        ErrorResponse { error: message }
     }
 }
 
