@@ -17,7 +17,7 @@ export default class AuctionsStore {
                     name: "Brand new fridge",
                     description: "Too big for my flat.",
                     user: "Anne",
-                    until: "2020/05/05",
+                    until: "2020/05/20",
                     actualPrice: 100,
                     winningUser: "John"
                 },

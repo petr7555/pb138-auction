@@ -7,9 +7,19 @@ interface ItemProps {
     item: AuctionItem;
 }
 
-const calculateTimeLeft = (isoString: string) => {
+interface TimeLeft {
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+}
+
+const calculateTimeLeft = (isoString: string): TimeLeft => {
     const difference = +Date.parse(isoString) - +new Date();
-    let timeLeft = {};
+    let timeLeft: TimeLeft  = {days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0};
 
     if (difference > 0) {
         timeLeft = {
@@ -23,11 +33,8 @@ const calculateTimeLeft = (isoString: string) => {
     return timeLeft;
 };
 
-export type TTimeLeft = ReturnType<typeof calculateTimeLeft>;
-
 export const Item = (props: ItemProps) => {
     const {item} = props;
-
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(item.until));
 
@@ -44,15 +51,14 @@ export const Item = (props: ItemProps) => {
         if (!timeLeft[interval]) {
             return;
         }
-
         // @ts-ignore
-        timerComponents.push(<span>{timeLeft[interval]} {interval}{" "}</span>);
+        timerComponents.push(`${timeLeft[interval]} ${interval} `);
     });
 
     return (
         <Card key={item.id} title={item.name} extra={<a href="#">More</a>} hoverable>
             <p>{item.description}</p>
-            <p>{item.actualPrice}</p>
+            <p>${item.actualPrice}</p>
             <p>{timerComponents.length ? timerComponents : <span>Time's up!</span>}</p>
         </Card>
     );
