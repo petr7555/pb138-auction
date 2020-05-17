@@ -1,10 +1,10 @@
 import {action, observable} from 'mobx'
-import AuctionItemEntity from "../entitites/AuctionItemEntity";
+import AuctionItem from "../entitites/AuctionItem";
 
-export default class UserStore {
+export default class AuctionsStore {
 
     @observable
-    auctions: AuctionItemEntity[] = [];
+    auctions: AuctionItem[] = [];
 
     @action
     async fetchAuctions() {

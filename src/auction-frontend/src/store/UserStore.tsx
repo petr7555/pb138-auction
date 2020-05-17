@@ -8,24 +8,6 @@ export default class UserStore {
     @observable
     currentPath = "";
 
-    @observable
-    count = 0
-
-    @action
-    increment(): void {
-        this.count++
-    }
-
-    @action
-    decrement(): void {
-        this.count--
-    }
-
-    @computed
-    get doubleCount(): number {
-        return this.count * 2
-    }
-
     @action
     async login(username: string): Promise<void> {
         try {

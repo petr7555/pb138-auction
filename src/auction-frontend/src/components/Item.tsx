@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import "antd/dist/antd.css";
 import {Card} from "antd";
-import AuctionItemEntity from "../entitites/AuctionItemEntity";
+import AuctionItem from "../entitites/AuctionItem";
 
-interface IItemProps {
-    item: AuctionItemEntity
+interface ItemProps {
+    item: AuctionItem;
 }
 
 const calculateTimeLeft = (isoString: string) => {
@@ -25,7 +25,7 @@ const calculateTimeLeft = (isoString: string) => {
 
 export type TTimeLeft = ReturnType<typeof calculateTimeLeft>;
 
-export const Item = (props: IItemProps) => {
+export const Item = (props: ItemProps) => {
     const {item} = props;
 
 
