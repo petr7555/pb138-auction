@@ -18,8 +18,8 @@ export default class AuctionsStore {
                     description: "Too big for my flat.",
                     user: "Anne",
                     until: "2020/05/05",
-                    actual_price: 100,
-                    winning_user: "John"
+                    actualPrice: 100,
+                    winningUser: "John"
                 }
             ]
             this.auctions = result;

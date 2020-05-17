@@ -15,6 +15,11 @@ html {
   color: var(--primary-text-color);
 }
 
+.App {
+  text-align: center;
+}
+
+
 .clearfix::after {
   content: "";
   clear: both;

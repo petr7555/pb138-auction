@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
-import {Card} from "antd";
+import { Card } from "antd";
 import AuctionItem from "../entitites/AuctionItem";
 
 interface ItemProps {
@@ -37,7 +37,7 @@ export const Item = (props: ItemProps) => {
         }, 1000);
     });
 
-    const timerComponents : string[] = [];
+    const timerComponents: string[] = [];
 
     Object.keys(timeLeft).forEach(interval => {
         // @ts-ignore
@@ -52,7 +52,7 @@ export const Item = (props: ItemProps) => {
     return (
         <Card key={item.id} title={item.name} extra={<a href="#">More</a>} hoverable style={{width: 300}}>
             <p>{item.description}</p>
-            <p>{item.actual_price}</p>
+            <p>{item.actualPrice}</p>
             <p>{timerComponents.length ? timerComponents : <span>Time's up!</span>}</p>
         </Card>
     );
