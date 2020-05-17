@@ -15,11 +15,6 @@ html {
   color: var(--primary-text-color);
 }
 
-.App {
-  text-align: center;
-}
-
-
 .clearfix::after {
   content: "";
   clear: both;
@@ -44,4 +39,12 @@ html {
 
 .login-form-username > .ant-form-item-label > label{
   font-size: 1rem;
+}
+
+.main-menu {
+  text-align: center;
+}
+
+.auctions {
+  padding: 24px;
 }

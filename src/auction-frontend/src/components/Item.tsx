@@ -50,7 +50,7 @@ export const Item = (props: ItemProps) => {
     });
 
     return (
-        <Card key={item.id} title={item.name} extra={<a href="#">More</a>} hoverable style={{width: 300}}>
+        <Card key={item.id} title={item.name} extra={<a href="#">More</a>} hoverable>
             <p>{item.description}</p>
             <p>{item.actualPrice}</p>
             <p>{timerComponents.length ? timerComponents : <span>Time's up!</span>}</p>
