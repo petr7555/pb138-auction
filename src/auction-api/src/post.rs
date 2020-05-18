@@ -20,6 +20,28 @@ fn get_conn(pool: web::Data<DbPool>) -> Result<PoolConnection, HttpResponse> {
     })
 }
 
+enum Response{
+    OK,
+    DUPLICATE,
+    ERROR
+}
+
+fn process_db_res<T>(res: Result<T, BlockingError<diesel::result::Error>>) -> Response
+where
+    T: Send + 'static
+{
+    match res {
+        Ok(_) => Response::OK,
+        Err(err) => match err {
+            BlockingError::Error(diesel_error) => match diesel_error {
+                DatabaseError(UniqueViolation, _msg) => Response::DUPLICATE,
+                _ => Response::ERROR,
+            },
+            BlockingError::Canceled => Response::ERROR,
+        },
+    }
+}
+
 #[post("/api/register")]
 pub async fn register_user(
     pool: web::Data<DbPool>,
@@ -30,18 +52,13 @@ pub async fn register_user(
     let new_user = form.into_inner();
 
     let res = web::block(move || actions::insert_new_user(&conn, &new_user)).await;
-    match res {
-        Ok(_) => Ok(HttpResponse::Ok().json(SuccessResponse { success: true })),
-        Err(err) => match err {
-            BlockingError::Error(diesel_error) => match diesel_error {
-                DatabaseError(UniqueViolation, _msg) => {
-                    let res = HttpResponse::Conflict().json(SuccessResponse { success: false });
-                    Ok(res)
-                }
-                _ => Ok(HttpResponse::InternalServerError().finish()),
-            },
-            BlockingError::Canceled => Ok(HttpResponse::InternalServerError().finish()),
-        },
+    match process_db_res(res) {
+        Response::OK => 
+            Ok(HttpResponse::Ok().json(SuccessResponse { success: true })),
+        Response::DUPLICATE => 
+            Ok(HttpResponse::Conflict().json(SuccessResponse { success: false })),
+        Response::ERROR => 
+            Ok(HttpResponse::InternalServerError().finish()),
     }
 }
 
@@ -55,14 +72,10 @@ pub async fn login_user(
     let user = form.into_inner();
     let user_moved = user.clone();
     let res = web::block(move || actions::find_user_by_name(&conn, user_moved.name())).await;
-    let login = match res {
-        Ok(db_user) => db_user.map_or(false, |u| u.password() == user.password()),
-        _ => {
-            HttpResponse::InternalServerError().finish();
-            false
-        }
-    };
-    Ok(HttpResponse::Ok().json(SuccessResponse { success: login }))
+    if let Ok(user) = res {
+        return Ok(HttpResponse::Ok().json(user))
+    }
+    return Ok(HttpResponse::InternalServerError().finish())
 }
 
 #[post("/api/auctions")]
@@ -76,18 +89,13 @@ pub async fn create_auction(
 
     let res = web::block(move || actions::insert_new_auction(&conn, &auction)).await;
 
-    match res {
-        Ok(_) => Ok(HttpResponse::Ok().json(SuccessResponse { success: true })),
-        Err(err) => match err {
-            BlockingError::Error(diesel_error) => match diesel_error {
-                DatabaseError(UniqueViolation, _msg) => {
-                    let res = HttpResponse::Conflict().json(SuccessResponse { success: false });
-                    Ok(res)
-                }
-                _ => Ok(HttpResponse::InternalServerError().finish()),
-            },
-            BlockingError::Canceled => Ok(HttpResponse::InternalServerError().finish()),
-        },
+    match process_db_res(res) {
+        Response::OK => 
+            Ok(HttpResponse::Ok().json(SuccessResponse { success: true })),
+        Response::DUPLICATE => 
+            Ok(HttpResponse::Conflict().json(SuccessResponse { success: false })),
+        Response::ERROR => 
+            Ok(HttpResponse::InternalServerError().finish()),
     }
 }
 
@@ -102,17 +110,12 @@ pub async fn create_bid(
 
     let res = web::block(move || actions::insert_new_bid(&conn, &bid)).await;
 
-    match res {
-        Ok(_) => Ok(HttpResponse::Ok().json(SuccessResponse { success: true })),
-        Err(err) => match err {
-            BlockingError::Error(diesel_error) => match diesel_error {
-                DatabaseError(UniqueViolation, _msg) => {
-                    let res = HttpResponse::Conflict().json(SuccessResponse { success: false });
-                    Ok(res)
-                }
-                _ => Ok(HttpResponse::InternalServerError().finish()),
-            },
-            BlockingError::Canceled => Ok(HttpResponse::InternalServerError().finish()),
-        },
+    match process_db_res(res) {
+        Response::OK => 
+            Ok(HttpResponse::Ok().json(SuccessResponse { success: true })),
+        Response::DUPLICATE => 
+            Ok(HttpResponse::Conflict().json(SuccessResponse { success: false })),
+        Response::ERROR => 
+            Ok(HttpResponse::InternalServerError().finish()),
     }
 }
