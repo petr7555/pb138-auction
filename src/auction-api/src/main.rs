@@ -28,8 +28,10 @@ async fn main() -> std::io::Result<()> {
         .build(manager)
         .expect("Failed to create pool.");
 
-    let conn = pool.get().expect("Database pool error");
-    embedded_migrations::run(&conn).expect("Migration init failed");
+    {
+        let conn = pool.get().expect("Database pool error");
+        embedded_migrations::run(&conn).expect("Migration init failed");
+    }
 
     let bind = "0.0.0.0:8080";
 
