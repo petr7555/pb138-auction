@@ -1,7 +1,7 @@
-use diesel::r2d2::PooledConnection;
 use crate::response::ErrorResponse;
 use actix_web::{get, web, HttpResponse};
 use diesel::r2d2::ConnectionManager;
+use diesel::r2d2::PooledConnection;
 use diesel::{r2d2, PgConnection};
 use serde::Serialize;
 
@@ -31,7 +31,7 @@ fn get_conn(pool: web::Data<DbPool>) -> Result<PoolConnection, HttpResponse> {
     })
 }
 
-#[get("/users/{id}")]
+#[get("/api/users/{id}")]
 pub async fn user(
     pool: web::Data<DbPool>,
     user_id: web::Path<i64>,
@@ -48,7 +48,7 @@ pub async fn user(
     error_handler(user, format!("No user found with id: {}", user_id))
 }
 
-#[get("/auctions/{id}")]
+#[get("/api/auctions/{id}")]
 pub async fn auction(
     pool: web::Data<DbPool>,
     auction_id: web::Path<i64>,
@@ -67,7 +67,7 @@ pub async fn auction(
     error_handler(auction, format!("No auction found with id: {}", auction_id))
 }
 
-#[get("/auctions")]
+#[get("/api/auctions")]
 pub async fn all_auctions(pool: web::Data<DbPool>) -> Result<HttpResponse, actix_web::Error> {
     let conn = get_conn(pool)?;
 
@@ -81,7 +81,7 @@ pub async fn all_auctions(pool: web::Data<DbPool>) -> Result<HttpResponse, actix
     Ok(HttpResponse::Ok().json(auctions))
 }
 
-#[get("/auctions/user/{id}")]
+#[get("/api/auctions/user/{id}")]
 pub async fn all_auctions_user_created(
     pool: web::Data<DbPool>,
     user_id: web::Path<i64>,
@@ -100,7 +100,7 @@ pub async fn all_auctions_user_created(
     Ok(HttpResponse::Ok().json(auctions))
 }
 
-#[get("/auctions-taken-part/user/{id}")]
+#[get("/api/auctions-taken-part/user/{id}")]
 pub async fn auctions_taken_part_user(
     pool: web::Data<DbPool>,
     user_id: web::Path<i64>,
@@ -110,11 +110,11 @@ pub async fn auctions_taken_part_user(
     let user_id = user_id.into_inner();
 
     let auctions = web::block(move || actions::find_auctions_user_taken_part_in(&conn, user_id))
-    .await
-    .map_err(|e| {
-        eprintln!("{}", e);
-        HttpResponse::InternalServerError().finish();
-    })?;
+        .await
+        .map_err(|e| {
+            eprintln!("{}", e);
+            HttpResponse::InternalServerError().finish();
+        })?;
 
     Ok(HttpResponse::Ok().json(auctions))
 }
