@@ -1,5 +1,5 @@
 import { message } from "antd";
-import NewAuction from "../../entitites/NewAuction";
+import NewAuction from "../entitites/NewAuction";
 
 export const createAuction = async (auction: NewAuction) => {
     try {
