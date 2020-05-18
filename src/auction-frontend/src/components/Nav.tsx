@@ -2,7 +2,7 @@ import React from "react";
 import {Button, Menu} from "antd";
 import {HourglassOutlined, IdcardOutlined, LogoutOutlined} from '@ant-design/icons';
 import {Link, withRouter} from 'react-router-dom';
-import {useStores} from "../hooks/use-stores";
+import {useStores} from "../store/use-stores";
 
 export const Nav = withRouter((props) => {
     const {location} = props;

@@ -1,6 +1,6 @@
 import React from "react";
 import {observer} from "mobx-react-lite";
-import {useStores} from "../hooks/use-stores";
+import {useStores} from "../store/use-stores";
 import {Button, Form, Input} from 'antd';
 import {Store} from "antd/lib/form/interface";
 import {Typography} from "antd";

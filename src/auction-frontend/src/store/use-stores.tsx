@@ -1,6 +1,6 @@
-import {storesContext} from "../context";
+import {storesContext} from "./index";
 import {useContext} from "react";
-import UserStore from "../store/UserStore";
+import UserStore from "./UserStore";
 
 interface ContextValue{
     userStore: UserStore;
