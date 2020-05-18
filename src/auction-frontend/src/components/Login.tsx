@@ -41,6 +41,15 @@ export const Login = observer(() => {
                     <Input/>
                 </Form.Item>
 
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[{required: true, message: 'Please input your password!'}]}
+                    className="login-form-password"
+                >
+                    <Input.Password/>
+                </Form.Item>
+
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit" className="login-form__button" size="large">
                         Submit
