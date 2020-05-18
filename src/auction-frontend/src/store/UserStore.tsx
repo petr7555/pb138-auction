@@ -1,47 +1,22 @@
-import {observable, action, computed} from 'mobx'
+import { action, observable } from 'mobx'
 
 export default class UserStore {
 
     @observable
     loggedIn = false;
 
-    @observable
-    currentPath = "";
-
-    @observable
-    count = 0
-
-    @action
-    increment(): void {
-        this.count++
-    }
-
-    @action
-    decrement(): void {
-        this.count--
-    }
-
-    @computed
-    get doubleCount(): number {
-        return this.count * 2
-    }
+    id = 0;
 
     @action
     async login(username: string): Promise<void> {
         try {
             // const res = await fetch(`http://localhost:8080/login/`);
             // const result = await res.json();
-            let result;
-            if (username === "Bob") {
-                result = {
-                    success: true
-                };
-            } else {
-                result = {
-                    success: false
-                };
+            const result = {
+                id: 1
             }
-            this.loggedIn = result.success;
+            this.id = result.id;
+            this.loggedIn = true;
         } catch (error) {
             this.loggedIn = false;
         }
