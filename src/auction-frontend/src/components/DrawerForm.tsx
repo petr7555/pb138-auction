@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import { Button, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createAuction } from "../api/apiCalls";
-import { useStores } from "../store/use-stores";
+import { useStores } from "../stores/use-stores";
 
 export const DrawerForm = () => {
     const [visible, setVisible] = useState(false);
@@ -20,7 +20,7 @@ export const DrawerForm = () => {
 
     const onSubmit = useCallback((values) => {
         createAuction({
-            userId: userStore.id,
+            userId: userStore.user.id,
             name: values.name,
             description: values.description,
             until: values.until.toISOString()

@@ -1,9 +1,9 @@
 import React from "react";
 import {observer} from "mobx-react-lite";
-import {useStores} from "../store/use-stores";
 import {Button, Form, Input} from 'antd';
 import {Store} from "antd/lib/form/interface";
 import {Typography} from "antd";
+import { useStores } from "../stores/use-stores";
 
 const {Title} = Typography;
 
@@ -12,19 +12,19 @@ const layout = {
     wrapperCol: {span: 5},
 };
 const tailLayout = {
-    wrapperCol: {offset: 10, flex: "auto"},
+    wrapperCol: {flex: "auto"},
 };
 
 export const Login = observer(() => {
     const {userStore} = useStores();
 
     const onFinish = (values: Store): void => {
-        userStore.login(values.username);
+        userStore.login(values.username, values.password);
     };
 
     return (
         <div>
-            <Title className="login-title">Auction system</Title>
+            <Title className="login-title">The BESTEST auction system</Title>
             <Form
                 {...layout}
                 name="basic"
@@ -39,6 +39,15 @@ export const Login = observer(() => {
                     className="login-form-username"
                 >
                     <Input/>
+                </Form.Item>
+
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[{required: true, message: 'Please input your password!'}]}
+                    className="login-form-password"
+                >
+                    <Input.Password/>
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>

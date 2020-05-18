@@ -110,13 +110,13 @@ pub fn find_auctions_user_taken_part_in(
     searched_user_id: i64,
 ) -> Result<Vec<Auction>, diesel::result::Error> {
     use crate::schema::auctions::dsl::*;
-    use crate::schema::bids;
+    use crate::schema::*;
     
     let auction_vec = auctions
     .distinct()
     .select((id, user_id, name, description, until, active, created_at))
     .inner_join(bids::dsl::bids)
-    .filter(user_id.eq(searched_user_id))
+    .filter(bids::user_id.eq(searched_user_id))
     .load(conn)?;
     
     Ok(auction_vec)

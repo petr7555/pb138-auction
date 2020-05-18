@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Identifiable, Serialize, Queryable, Getters)]
 #[serde(rename_all = "camelCase")]
 pub struct User {
-    id: i64,
+    pub id: i64,
     name: String,
     #[getset(get = "pub")]
     password: String,
@@ -19,9 +19,9 @@ pub struct User {
 #[table_name = "users"]
 pub struct NewUser {
     #[getset(get = "pub")]
-    name: String,
+    pub name: String,
     #[getset(get = "pub")]
-    password: String,
+    pub password: String,
 }
 
 #[derive(Identifiable, Serialize, Queryable, Associations)]
@@ -41,16 +41,16 @@ pub struct Bid {
 #[serde(rename_all = "camelCase")]
 #[table_name = "bids"]
 pub struct NewBid {
-    user_id: i64,
-    auction_id: i64,
-    amount: i64,
+    pub user_id: i64,
+    pub auction_id: i64,
+    pub amount: i64,
 }
 
 #[derive(Identifiable, Serialize, Queryable, Associations)]
 #[serde(rename_all = "camelCase")]
 #[belongs_to(User)]
 pub struct Auction {
-    id: i64,
+    pub id: i64,
     user_id: i64,
     name: String,
     description: String,
@@ -63,8 +63,8 @@ pub struct Auction {
 #[serde(rename_all = "camelCase")]
 #[table_name = "auctions"]
 pub struct NewAuction {
-    name: String,
-    description: String,
-    until: DateTime<Utc>,
-    user_id: i64,
+    pub name: String,
+    pub description: String,
+    pub until: DateTime<Utc>,
+    pub user_id: i64,
 }

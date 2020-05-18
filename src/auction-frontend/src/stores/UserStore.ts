@@ -1,21 +1,24 @@
 import { action, observable } from 'mobx'
+import { User } from '../entitites/User';
 
 export default class UserStore {
 
     @observable
     loggedIn = false;
 
-    id = 0;
+    @observable
+    user: User = {id: 0, username: ""};
 
     @action
-    async login(username: string): Promise<void> {
+    async login(username: string, password: string): Promise<void> {
         try {
             // const res = await fetch(`http://localhost:8080/login/`);
             // const result = await res.json();
             const result = {
-                id: 1
+                id: 1,
+                username: "Bob"
             }
-            this.id = result.id;
+            this.user = result;
             this.loggedIn = true;
         } catch (error) {
             this.loggedIn = false;

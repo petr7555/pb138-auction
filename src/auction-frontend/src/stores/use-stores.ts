@@ -1,4 +1,4 @@
-import {storesContext} from "./index";
+import {storesContext} from "./context";
 import {useContext} from "react";
 import UserStore from "./UserStore";
 
