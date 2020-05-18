@@ -12,7 +12,7 @@ const layout = {
     wrapperCol: {span: 5},
 };
 const tailLayout = {
-    wrapperCol: {offset: 10, flex: "auto"},
+    wrapperCol: {flex: "auto"},
 };
 
 export const Login = observer(() => {
@@ -24,7 +24,7 @@ export const Login = observer(() => {
 
     return (
         <div>
-            <Title className="login-title">Auction system</Title>
+            <Title className="login-title">The BESTEST auction system</Title>
             <Form
                 {...layout}
                 name="basic"

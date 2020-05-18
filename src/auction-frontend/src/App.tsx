@@ -9,8 +9,7 @@ export const App = observer(() => {
     const {userStore} = useStores();
     return (
         <div className="App" >
-            {/*{userStore.loggedIn ? <Main/> : <Login/>}*/}
-            <Main/>
+            {userStore.loggedIn ? <Main/> : <Login/>}
         </div>
     );
 })
