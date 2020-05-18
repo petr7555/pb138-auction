@@ -72,14 +72,10 @@ pub async fn login_user(
     let user = form.into_inner();
     let user_moved = user.clone();
     let res = web::block(move || actions::find_user_by_name(&conn, user_moved.name())).await;
-    let login = match res {
-        Ok(db_user) => db_user.map_or(false, |u| u.password() == user.password()),
-        _ => {
-            HttpResponse::InternalServerError().finish();
-            false
-        }
-    };
-    Ok(HttpResponse::Ok().json(SuccessResponse { success: login }))
+    if let Ok(user) = res {
+        return Ok(HttpResponse::Ok().json(user))
+    }
+    return Ok(HttpResponse::InternalServerError().finish())
 }
 
 #[post("/api/auctions")]
