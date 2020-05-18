@@ -1,13 +1,17 @@
-#FROM rust:1.40 as builder
-#WORKDIR /usr/src/auction-api
-#COPY . .
-#RUN cargo install --path .
+FROM rust as builder
+WORKDIR /usr/src/auction-api
+# Lets docker cache compiled deprendendencies
+RUN echo "fn main() {}" > dummy.rs
+COPY Cargo.toml .
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+RUN cargo build --release
+RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+COPY . .
+RUN cargo install --path .
 
 FROM debian:stable-slim
 RUN apt-get update && apt-get install -y libpq-dev
-
-#COPY --from=builder /usr/local/cargo/bin/auction-api /usr/local/bin/auction-api
-COPY ./target/debug/auction-api /usr/local/bin/auction-api
+COPY --from=builder /usr/local/cargo/bin/auction-api /usr/local/bin/auction-api
 
 EXPOSE 8080
 
