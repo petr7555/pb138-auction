@@ -13,7 +13,7 @@ export const Auctions = observer(() => {
     }, [])
 
     return (
-        <div className="auctions">
+        <div>
             <Row gutter={[16, 16]}>
                 {auctionsStore.auctions.map((auction: AuctionItem) => {
                     return (
