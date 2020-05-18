@@ -22,10 +22,6 @@ export const Login = observer(() => {
         userStore.login(values.username);
     };
 
-    const onFinishFailed = (errorInfo: any): void => {
-        console.log('Failed:', errorInfo);
-    };
-
     return (
         <div>
             <Title className="login-title">Auction system</Title>
@@ -34,7 +30,6 @@ export const Login = observer(() => {
                 name="basic"
                 initialValues={{username: ""}}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
                 className="login-form"
             >
                 <Form.Item

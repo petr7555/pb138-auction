@@ -4,6 +4,7 @@ import AuctionItem from "../entitites/AuctionItem";
 import { Col, Divider, Row } from "antd";
 import { Item } from "./Item";
 import { getMockAuctions } from "../mocks/mocks";
+import { DrawerForm } from "./DrawerForm";
 
 export const MyOfferings = observer(() => {
 
@@ -12,6 +13,7 @@ export const MyOfferings = observer(() => {
     return (
         <div>
             <Divider><h2>My offerings</h2></Divider>
+            <DrawerForm/>
             <Row gutter={[16, 16]}>
                 {auctions.map((auction: AuctionItem) => {
                     return (
