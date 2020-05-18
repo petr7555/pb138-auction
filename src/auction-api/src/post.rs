@@ -20,7 +20,7 @@ fn get_conn(pool: web::Data<DbPool>) -> Result<PoolConnection, HttpResponse> {
     })
 }
 
-#[post("/register")]
+#[post("/api/register")]
 pub async fn register_user(
     pool: web::Data<DbPool>,
     form: web::Json<NewUser>,
@@ -45,7 +45,7 @@ pub async fn register_user(
     }
 }
 
-#[post("/login")]
+#[post("/api/login")]
 pub async fn login_user(
     pool: web::Data<DbPool>,
     form: web::Json<NewUser>,
@@ -65,7 +65,7 @@ pub async fn login_user(
     Ok(HttpResponse::Ok().json(SuccessResponse { success: login }))
 }
 
-#[post("/auctions")]
+#[post("/api/auctions")]
 pub async fn create_auction(
     pool: web::Data<DbPool>,
     form: web::Json<NewAuction>,
@@ -91,7 +91,7 @@ pub async fn create_auction(
     }
 }
 
-#[post("/bids")]
+#[post("/api/bids")]
 pub async fn create_bid(
     pool: web::Data<DbPool>,
     form: web::Json<NewBid>,
