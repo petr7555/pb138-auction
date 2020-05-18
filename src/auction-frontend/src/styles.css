@@ -1,0 +1,42 @@
+:root {
+  --primary-color: #689f38;
+  --primary-light-color: #99d066;
+  --primary-dark-color: #387002;
+  --primary-text-color: #000;
+  --secondary-text-color: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: larger;
+  color: var(--primary-text-color);
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.login-form {
+  margin: 5rem 0rem;
+}
+
+.login-title {
+  width: 100%;
+  background-color: var(--primary-light-color);
+  display: flex;
+  justify-content: center;
+}
+
+.login-form__button {
+  color: var(--secondary-text-color);
+  background-color: var(--primary-dark-color);
+}
+
+.login-form-username > .ant-form-item-label > label{
+  font-size: 1rem;
+}
