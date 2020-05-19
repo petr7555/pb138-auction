@@ -42,6 +42,24 @@
   margin: 1rem 0.25rem;
 }
 
+.button-link {
+  border: none;
+  background-color: inherit;
+  font-size: @font-size-base;
+  color: @primary-color;
+  cursor: pointer;
+  display: inline-block;
+  transition-duration: 0.4s;
+}
+
+.button-link:hover {
+  color: @primary-5;
+}
+
+.button-link:focus {
+  outline: 0;
+}
+
 // hide divider on small screens, because "participating in" and "my offerings" are below each other
 @media (max-width: 575px) {
   .my-auctions-divider {
