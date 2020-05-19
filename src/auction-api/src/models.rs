@@ -75,7 +75,8 @@ pub struct ReturnAuction {
     pub id: i64,
     name: String,
     description: String,
+    user: String,
     until: DateTime<Utc>,
     actual_price: Option<i64>,
-    winning_user: Option<String>,
+    winning_user_id: Option<i64>,
 }

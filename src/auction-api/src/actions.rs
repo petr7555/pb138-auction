@@ -24,9 +24,9 @@ pub fn find_auction_by_id(
     let auction = auctions::dsl::auctions
         .filter(auctions::id.eq(auction_id))
         .left_join(bids::dsl::bids)
-        .left_join(users::dsl::users.on(users::id.eq(bids::user_id)))
+        .inner_join(users::dsl::users)
         .order((bids::amount, bids::created_at))
-        .select((auctions::id, auctions::name, auctions::description, auctions::until, bids::amount.nullable(), users::name.nullable()))
+        .select((auctions::id, auctions::name, auctions::description, users::name, auctions::until, bids::amount.nullable(), bids::user_id.nullable()))
         .first::<ReturnAuction>(conn)
         .optional()?;
 
@@ -71,9 +71,9 @@ pub fn find_all_auctions(conn: &PgConnection) -> Result<Vec<ReturnAuction>, dies
 
     let auction_vec = auctions::dsl::auctions
         .left_join(bids::dsl::bids)
-        .left_join(users::dsl::users.on(users::id.eq(bids::user_id)))
+        .inner_join(users::dsl::users)
         .order((bids::amount, bids::created_at))
-        .select((auctions::id, auctions::name, auctions::description, auctions::until, bids::amount.nullable(), users::name.nullable()))
+        .select((auctions::id, auctions::name, auctions::description, users::name, auctions::until, bids::amount.nullable(), bids::user_id.nullable()))
         .load(conn)?;
 
     Ok(auction_vec)
@@ -102,9 +102,9 @@ pub fn find_auctions_by_user_id(
     let auction_vec = auctions::dsl::auctions
         .filter(auctions::user_id.eq(user.id))
         .left_join(bids::dsl::bids)
-        .left_join(users::dsl::users.on(users::id.eq(bids::user_id)))
+        .inner_join(users::dsl::users)
         .order((bids::amount, bids::created_at))
-        .select((auctions::id, auctions::name, auctions::description, auctions::until, bids::amount.nullable(), users::name.nullable()))
+        .select((auctions::id, auctions::name, auctions::description, users::name, auctions::until, bids::amount.nullable(), bids::user_id.nullable()))
         .load(conn)?;
 
     Ok(auction_vec)
