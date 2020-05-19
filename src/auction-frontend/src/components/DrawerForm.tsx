@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Button, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createAuction } from "../api/apiCalls";
-import { useStores } from "../stores/use-stores";
+import { UserContext } from "../App";
 
 export const DrawerForm = () => {
     const [visible, setVisible] = useState(false);
@@ -16,11 +16,12 @@ export const DrawerForm = () => {
         setVisible(false);
     };
 
-    const {userStore} = useStores();
+    const userContext = useContext(UserContext);
 
     const onFinish = useCallback((values) => {
         createAuction({
-            userId: userStore.user.id,
+            // @ts-ignore
+            userId: userContext.userState.user.id,
             name: values.name,
             description: values.description,
             until: values.until.toISOString()

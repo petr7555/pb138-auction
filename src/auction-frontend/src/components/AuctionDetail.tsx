@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RouteComponentProps } from 'react-router';
-import { Button, Descriptions, Form, InputNumber, message, notification, Skeleton } from "antd";
+import { Button, Descriptions, Form, InputNumber, Skeleton } from "antd";
 import AuctionItem from "../entitites/AuctionItem";
 import { Timer } from "./Timer";
 import { Store } from "antd/lib/form/interface";
 import axios from 'axios';
-import { useStores } from "../stores/use-stores";
 import { showError, showSuccess } from "../api/apiCalls";
+import { UserContext } from "../App";
 
 interface MatchParams {
     id: string;
 }
 
 export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
-        const {userStore} = useStores();
+        const userContext = useContext(UserContext);
 
         const [item, setItem] = useState<AuctionItem | undefined>(undefined);
 
@@ -46,7 +46,8 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
         const onFinish = async (values: Store) => {
             try {
                 const response = await axios.post("http://localhost:8080/api/bids", {
-                    userId: userStore.user.id,
+                    // @ts-ignore
+                    userId: userContext.userState.user.id,
                     auctionId: item?.id,
                     amount: values.bid
                 });

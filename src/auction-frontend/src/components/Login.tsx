@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Alert, Button, Form, Modal, Typography } from 'antd';
 import { Store } from "antd/lib/form/interface";
-import { useStores } from "../stores/use-stores";
 import { FormFragment } from "./FormFragment";
+import { showError } from "../api/apiCalls";
+import axios from 'axios';
+import { UserContext } from "../App";
 
 const {Title} = Typography;
 
@@ -16,14 +18,32 @@ const tailLayout = {
 };
 
 export const Login = observer(() => {
-    const {userStore} = useStores();
+    const userContext = useContext(UserContext);
 
     const [visible, setVisible] = useState();
     const [error, setError] = useState(false);
     const [form] = Form.useForm();
 
     const onFinishLogin = async (values: Store) => {
-        const res= await userStore.login(values.username, values.password);
+        try {
+            const res = await axios.post('http://localhost:8080/api/login', {
+                name: values.username,
+                password: values.password
+            });
+            // @ts-ignore
+            userContext.setUserState({
+                user: res.data,
+                loggedIn: true
+            });
+            return true;
+        } catch (error) {
+            if (error.respose) {
+                if (error.respose.status === 401) {
+                    return false;
+                }
+            }
+            showError(error);
+        }
     };
 
     const onFinishRegister = (values: Store): void => {
@@ -50,7 +70,7 @@ export const Login = observer(() => {
                 onFinish={onFinishLogin}
                 className="login-form"
             >
-                <Alert message="Error Text" type="error" />
+                <Alert message="Error Text" type="error"/>
                 <FormFragment/>
                 <p>Do not have an account? <a onClick={showModal}>Register.</a></p>
                 <Form.Item {...tailLayout}>

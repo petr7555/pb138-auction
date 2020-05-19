@@ -1,4 +1,4 @@
-import { message, notification } from "antd";
+import { notification } from "antd";
 import NewAuction from "../entitites/NewAuction";
 import axios from 'axios';
 

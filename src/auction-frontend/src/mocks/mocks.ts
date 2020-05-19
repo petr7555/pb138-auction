@@ -1,4 +1,4 @@
-export const getMockAuctions = () =>{
+export const getMockAuctions = () => {
     return [
         {
             id: 1,

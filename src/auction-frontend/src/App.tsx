@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Login } from "./components/Login";
-import { useStores } from "./stores/use-stores";
 import { observer } from "mobx-react-lite";
 import { Main } from "./components/Main";
 import "./styles.less";
 
+export const UserContext = React.createContext(null);
+
 export const App = observer(() => {
-    const {userStore} = useStores();
+    const [userState, setUserState] = useState({loggedIn: false});
+
     return (
-        <div className="App" >
-            {userStore.loggedIn ? <Main/> : <Login/>}
-        </div>
+        // @ts-ignore
+        <UserContext.Provider value={{userState, setUserState}}>
+            <div className="App">
+                {userState.loggedIn ? <Main/> : <Login/>}
+            </div>
+        </UserContext.Provider>
     );
 })
 
