@@ -1,4 +1,4 @@
-use crate::models::{Auction, Bid, NewAuction, NewBid, NewUser, User};
+use crate::models::{Auction, ReturnAuction, Bid, NewAuction, NewBid, NewUser, User};
 use diesel::prelude::*;
 
 pub fn find_user_by_id(
@@ -18,12 +18,16 @@ pub fn find_user_by_id(
 pub fn find_auction_by_id(
     conn: &PgConnection,
     auction_id: i64,
-) -> Result<Option<Auction>, diesel::result::Error> {
-    use crate::schema::auctions::dsl::*;
+) -> Result<Option<ReturnAuction>, diesel::result::Error> {
+    use crate::schema::*;
 
-    let auction = auctions
-        .filter(id.eq(auction_id))
-        .first::<Auction>(conn)
+    let auction = auctions::dsl::auctions
+        .filter(auctions::id.eq(auction_id))
+        .left_join(bids::dsl::bids)
+        .left_join(users::dsl::users.on(users::id.eq(bids::user_id)))
+        .order((bids::amount, bids::created_at))
+        .select((auctions::id, auctions::name, auctions::description, auctions::until, bids::amount.nullable(), users::name.nullable()))
+        .first::<ReturnAuction>(conn)
         .optional()?;
 
     Ok(auction)
@@ -62,10 +66,15 @@ pub fn insert_new_user(
     Ok(inserted_user)
 }
 
-pub fn find_all_auctions(conn: &PgConnection) -> Result<Vec<Auction>, diesel::result::Error> {
-    use crate::schema::auctions::dsl::*;
+pub fn find_all_auctions(conn: &PgConnection) -> Result<Vec<ReturnAuction>, diesel::result::Error> {
+    use crate::schema::*;
 
-    let auction_vec = auctions.load(conn)?;
+    let auction_vec = auctions::dsl::auctions
+        .left_join(bids::dsl::bids)
+        .left_join(users::dsl::users.on(users::id.eq(bids::user_id)))
+        .order((bids::amount, bids::created_at))
+        .select((auctions::id, auctions::name, auctions::description, auctions::until, bids::amount.nullable(), users::name.nullable()))
+        .load(conn)?;
 
     Ok(auction_vec)
 }
@@ -86,11 +95,17 @@ pub fn insert_new_auction(
 pub fn find_auctions_by_user_id(
     conn: &PgConnection,
     user_id: i64,
-) -> Result<Vec<Auction>, diesel::result::Error> {
-    use crate::schema::users::dsl::*;
+) -> Result<Vec<ReturnAuction>, diesel::result::Error> {
+    use crate::schema::*;
 
-    let user = users.find(user_id).first::<User>(conn)?;
-    let auction_vec = Auction::belonging_to(&user).load(conn)?;
+    let user = users::dsl::users.find(user_id).first::<User>(conn)?;
+    let auction_vec = auctions::dsl::auctions
+        .filter(auctions::user_id.eq(user.id))
+        .left_join(bids::dsl::bids)
+        .left_join(users::dsl::users.on(users::id.eq(bids::user_id)))
+        .order((bids::amount, bids::created_at))
+        .select((auctions::id, auctions::name, auctions::description, auctions::until, bids::amount.nullable(), users::name.nullable()))
+        .load(conn)?;
 
     Ok(auction_vec)
 }

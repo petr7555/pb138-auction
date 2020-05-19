@@ -68,3 +68,14 @@ pub struct NewAuction {
     pub until: DateTime<Utc>,
     pub user_id: i64,
 }
+
+#[derive(Serialize, Queryable)]
+#[derive(Debug)]
+pub struct ReturnAuction {
+    pub id: i64,
+    name: String,
+    description: String,
+    until: DateTime<Utc>,
+    actual_price: Option<i64>,
+    winning_user: Option<String>,
+}
