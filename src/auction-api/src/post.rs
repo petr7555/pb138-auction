@@ -1,5 +1,5 @@
 use crate::models::{NewAuction, NewUser, NewBid};
-use crate::response::SuccessResponse;
+use crate::response::{SuccessResponse, ErrorResponse};
 use actix_web::{error::BlockingError, post, web, HttpResponse};
 use diesel::r2d2::{ConnectionManager, PooledConnection};
 use diesel::{r2d2, PgConnection};
@@ -78,7 +78,7 @@ pub async fn login_user(
                 return Ok(HttpResponse::Ok().json(user_res))
             }
         }
-        return Ok(HttpResponse::Unauthorized().finish())
+        return Ok(HttpResponse::Unauthorized().json(ErrorResponse::from("unknown user or invalid password".to_owned())))
     }
     return Ok(HttpResponse::InternalServerError().finish())
 }
