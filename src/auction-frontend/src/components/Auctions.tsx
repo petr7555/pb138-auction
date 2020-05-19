@@ -6,7 +6,7 @@ import useDataApi from 'use-data-api';
 
 export const Auctions = () => {
     const [{data, isLoading, isError}, doFetch] = useDataApi(
-        'http://localhost:8080/api/auctions/',
+        'http://localhost:8080/api/auctions',
         [],
     );
 
