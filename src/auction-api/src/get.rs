@@ -9,7 +9,7 @@ use crate::actions;
 
 type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
-fn error_handler<T: Serialize>(
+fn db_res_handler<T: Serialize>(
     db_response: Option<T>,
     err_str: String,
 ) -> Result<HttpResponse, actix_web::Error> {
@@ -45,7 +45,7 @@ pub async fn user(
             HttpResponse::InternalServerError().finish();
         })?;
 
-    error_handler(user, format!("No user found with id: {}", user_id))
+    db_res_handler(user, format!("No user found with id: {}", user_id))
 }
 
 #[get("/api/auctions/{id}")]
@@ -64,7 +64,7 @@ pub async fn auction(
             HttpResponse::InternalServerError().finish();
         })?;
 
-    error_handler(auction, format!("No auction found with id: {}", auction_id))
+    db_res_handler(auction, format!("No auction found with id: {}", auction_id))
 }
 
 #[get("/api/auctions")]
