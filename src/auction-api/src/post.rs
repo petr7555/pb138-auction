@@ -72,8 +72,13 @@ pub async fn login_user(
     let user = form.into_inner();
     let user_moved = user.clone();
     let res = web::block(move || actions::find_user_by_name(&conn, user_moved.name())).await;
-    if let Ok(user) = res {
-        return Ok(HttpResponse::Ok().json(user))
+    if let Ok(user_res) = res {
+        if let Some(user_res) = user_res {
+            if user.password() == user.password() {
+                return Ok(HttpResponse::Ok().json(user_res))
+            }
+        }
+        return Ok(HttpResponse::Unauthorized().finish())
     }
     return Ok(HttpResponse::InternalServerError().finish())
 }
