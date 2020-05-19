@@ -56,7 +56,6 @@ pub struct Auction {
     description: String,
     until: DateTime<Utc>,
     active: bool,
-    pub winning_bid_id: i64,
     created_at: NaiveDateTime,
 }
 

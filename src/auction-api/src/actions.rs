@@ -29,20 +29,6 @@ pub fn find_auction_by_id(
     Ok(auction)
 }
 
-pub fn find_bid_by_id(
-    conn: &PgConnection,
-    bid_id: i64,
-) -> Result<Option<Bid>, diesel::result::Error> {
-    use crate::schema::bids::dsl::*;
-
-    let bid = bids
-        .filter(id.eq(bid_id))
-        .first::<Bid>(conn)
-        .optional()?;
-
-    Ok(bid)
-}
-
 pub fn find_user_by_name(
     conn: &PgConnection,
     user_name: &str,
@@ -112,22 +98,22 @@ pub fn find_auctions_by_user_id(
 pub fn insert_new_bid(conn: &PgConnection, new_bid: &NewBid) -> Result<Bid, diesel::result::Error> {
     use crate::schema::*;
 
-    let auction = find_auction_by_id(conn, new_bid.auction_id).unwrap().unwrap();
-    let win_bid_res = find_bid_by_id(conn, auction.winning_bid_id).unwrap();
-    if win_bid_res.is_some() {
-        let win_bid = win_bid_res.unwrap();
-        if win_bid.amount >= new_bid.amount {
-            return Ok(win_bid)
+    let highest_bid_res = bids::dsl::bids
+        .filter(bids::auction_id.eq(new_bid.auction_id))
+        .order((bids::amount, bids::created_at))
+        .first::<Bid>(conn)
+        .optional()?;
+
+    if highest_bid_res.is_some() {
+        let highest_bid = highest_bid_res.unwrap();
+        if highest_bid.amount >= new_bid.amount {
+            return Ok(highest_bid)
         }
     }
 
     let inserted_bid = diesel::insert_into(bids::dsl::bids)
         .values(new_bid)
         .get_result::<Bid>(conn)?;
-
-    diesel::update(auctions::dsl::auctions.filter(auctions::id.eq(auction.id)))
-        .set(auctions::winning_bid_id.eq(inserted_bid.id))
-        .get_result::<Auction>(conn)?;
 
     Ok(inserted_bid)
 }
@@ -141,7 +127,7 @@ pub fn find_auctions_user_taken_part_in(
     
     let auction_vec = auctions
     .distinct()
-    .select((id, user_id, name, description, until, active, winning_bid_id, created_at))
+    .select((id, user_id, name, description, until, active, created_at))
     .inner_join(bids::dsl::bids)
     .filter(bids::user_id.eq(searched_user_id))
     .load(conn)?;

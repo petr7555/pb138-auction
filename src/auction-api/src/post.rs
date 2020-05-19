@@ -118,12 +118,13 @@ pub async fn create_bid(
     let res = web::block(move || actions::insert_new_bid(&conn, &bid)).await;
 
     match res {
-        Ok(res_bid) => if res_bid.amount == amount && res_bid.user_id == user {
-            Ok(HttpResponse::Ok().json(SuccessResponse { success: true }))
-        }
-        else {
-            Ok(HttpResponse::Conflict().json(SuccessResponse { success: false }))
-        }
+        Ok(res_bid) => 
+            if res_bid.amount == amount && res_bid.user_id == user {
+                Ok(HttpResponse::Ok().json(SuccessResponse { success: true }))
+            }
+            else {
+                Ok(HttpResponse::Conflict().json(SuccessResponse { success: false }))
+            }
         Err(err) => match err {
             BlockingError::Error(diesel_error) => match diesel_error {
                 DatabaseError(UniqueViolation, _msg) => Ok(HttpResponse::Conflict().json(SuccessResponse { success: false })),
