@@ -20,6 +20,12 @@ embed_migrations!();
 
 
 async fn initial_data(conn: &PgConnection) {
+
+    if actions::find_user_by_name(conn, "Joe").unwrap().is_some() {
+        println!("database is not empty, skipping data init");
+        return;
+    }
+    
     let new_user = models::NewUser {
         name: "Joe".to_owned(),
         password: "1234".to_owned(),
