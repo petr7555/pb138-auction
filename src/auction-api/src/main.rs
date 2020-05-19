@@ -21,7 +21,7 @@ embed_migrations!();
 
 async fn initial_data(conn: &PgConnection) {
 
-    if actions::find_user_by_name(conn, "Joe").is_ok() {
+    if actions::find_user_by_name(conn, "Joe").unwrap().is_some() {
         println!("database is not empty, skipping data init");
         return;
     }
