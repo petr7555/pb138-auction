@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Form, Modal, Typography } from 'antd';
+import { Alert, Button, Form, Modal, Typography } from 'antd';
 import { Store } from "antd/lib/form/interface";
 import { useStores } from "../stores/use-stores";
 import { FormFragment } from "./FormFragment";
@@ -19,10 +19,11 @@ export const Login = observer(() => {
     const {userStore} = useStores();
 
     const [visible, setVisible] = useState();
+    const [error, setError] = useState(false);
     const [form] = Form.useForm();
 
-    const onFinishLogin = (values: Store): void => {
-        userStore.login(values.username, values.password);
+    const onFinishLogin = async (values: Store) => {
+        const res= await userStore.login(values.username, values.password);
     };
 
     const onFinishRegister = (values: Store): void => {
@@ -49,6 +50,7 @@ export const Login = observer(() => {
                 onFinish={onFinishLogin}
                 className="login-form"
             >
+                <Alert message="Error Text" type="error" />
                 <FormFragment/>
                 <p>Do not have an account? <a onClick={showModal}>Register.</a></p>
                 <Form.Item {...tailLayout}>

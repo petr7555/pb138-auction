@@ -1,33 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from 'react-router';
-import { Button, Descriptions, Form, InputNumber, message, Skeleton } from "antd";
+import { Button, Descriptions, Form, InputNumber, message, notification, Skeleton } from "antd";
 import AuctionItem from "../entitites/AuctionItem";
 import { Timer } from "./Timer";
 import { Store } from "antd/lib/form/interface";
+import axios from 'axios';
+import { useStores } from "../stores/use-stores";
+import { showError, showSuccess } from "../api/apiCalls";
 
 interface MatchParams {
     id: string;
 }
 
 export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
+        const {userStore} = useStores();
+
         const [item, setItem] = useState<AuctionItem | undefined>(undefined);
 
         const fetchItem = async () => {
             try {
-                // const res = await fetch(`http://localhost:8080/api/auctions/${match.params.id}`);
-                // return res.json();
-                const result = {
-                    id: 1,
-                    name: "Brand new fridge",
-                    description: "Too big for my flat.",
-                    user: "Anne",
-                    until: "2020/05/20",
-                    actualPrice: 100,
-                    winningUser: "John"
-                };
-                setItem(result);
+                const res = await axios(`http://localhost:8080/api/auctions/${match.params.id}`);
+                // const result = {
+                //     id: 1,
+                //     name: "Brand new fridge",
+                //     description: "Too big for my flat.",
+                //     user: "Anne",
+                //     until: "2020/05/20",
+                //     actualPrice: 100,
+                //     winningUser: "John"
+                // };
+                setItem(res.data);
             } catch (error) {
-                message.error(error.message)
+                showError(error);
             }
         }
 
@@ -41,17 +45,15 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
 
         const onFinish = async (values: Store) => {
             try {
-                const response = await fetch("http://localhost:8080/api/bids", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: values.bid
-                })
+                const response = await axios.post("http://localhost:8080/api/bids", {
+                    userId: userStore.user.id,
+                    auctionId: item?.id,
+                    amount: values.bid
+                });
                 await fetchItem();
-                response.ok ? message.success('Bid has been placed.') : message.error("Bid couldn't be placed.");
+                showSuccess("Bid has been placed! You are now the highest bidder!")
             } catch (error) {
-                message.error(error.message);
+                showError(error);
             }
         };
 

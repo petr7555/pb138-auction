@@ -1,6 +1,7 @@
 import { action, observable } from 'mobx'
 import { User } from '../entitites/User';
-import { message } from "antd";
+import axios from 'axios';
+import { showError } from "../api/apiCalls";
 
 export default class UserStore {
 
@@ -11,23 +12,22 @@ export default class UserStore {
     user: User = {id: 0, username: ""};
 
     @action
-    async login(username: string, password: string): Promise<void> {
+    async login(username: string, password: string) {
         try {
-            const res = await fetch('http://localhost:8080/api/login', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name: username,
-                    password
-                })
+            const res = await axios.post('http://localhost:8080/api/login', {
+                name: username,
+                password
             });
-            this.user = await res.json();
+            this.user = res.data;
             this.loggedIn = true;
+            return true;
         } catch (error) {
-            this.loggedIn = false;
-            message.error(error.message)
+            if (error.respose) {
+                if (error.respose.status === 401) {
+                    return false;
+                }
+            }
+            showError(error);
         }
     }
 }
