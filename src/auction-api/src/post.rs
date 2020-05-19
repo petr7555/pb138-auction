@@ -74,7 +74,7 @@ pub async fn login_user(
     let res = web::block(move || actions::find_user_by_name(&conn, user_moved.name())).await;
     if let Ok(user_res) = res {
         if let Some(user_res) = user_res {
-            if user.password() == user.password() {
+            if user.password() == user_res.password() {
                 return Ok(HttpResponse::Ok().json(user_res))
             }
         }
