@@ -17,7 +17,7 @@ export const MyOfferings = observer(() => {
             <Row gutter={[16, 16]}>
                 {auctions.map((auction: AuctionItem) => {
                     return (
-                        <Col xs={12}>
+                        <Col xs={24} sm={24} md={12} lg={12} xxl={12}>
                             <Item item={auction} key={auction.id}/>
                         </Col>
                     )

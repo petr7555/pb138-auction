@@ -11,7 +11,7 @@ export const ParticipatingAuctions = observer(() => {
 
     return (
         <div>
-            <Divider><h2>Participating auctions</h2></Divider>
+            <Divider><h2>Participating in</h2></Divider>
             <Row gutter={[16, 16]}>
                 {auctions.map((auction: AuctionItem) => {
                     return (

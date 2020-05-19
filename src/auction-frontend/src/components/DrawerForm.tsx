@@ -37,8 +37,9 @@ export const DrawerForm = () => {
                 <PlusOutlined/> New offer
             </Button>
             <Drawer
-                title="Create a new auction"
+                className="drawer-form"
                 width={720}
+                title="Create a new auction"
                 onClose={onClose}
                 visible={visible}
                 bodyStyle={{paddingBottom: 80}}

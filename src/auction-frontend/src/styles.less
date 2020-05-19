@@ -2,12 +2,13 @@
 
 .login-form {
   text-align: center;
-  margin: 5rem 0rem;
+  margin: 5rem 3rem;
 }
 
 .login-title {
   text-align: center;
   background-color: @primary-color;
+  padding: 0.8rem;
 }
 
 .login-form-username > .ant-form-item-label > label{
@@ -25,3 +26,15 @@
 .main-content {
   padding: 24px;
 }
+
+.drawer-form .ant-drawer-content-wrapper {
+  max-width: 100%;
+}
+
+// hide divider on small screens, because "participating in" and "my offerings" are below each other
+@media (max-width: 575px){
+  .my-auctions-divider {
+    display: none;
+  }
+}
+
