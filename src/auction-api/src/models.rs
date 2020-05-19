@@ -29,10 +29,10 @@ pub struct NewUser {
 #[belongs_to(User)]
 #[belongs_to(Auction)]
 pub struct Bid {
-    id: i64,
-    user_id: i64,
+    pub id: i64,
+    pub user_id: i64,
     auction_id: i64,
-    amount: i64,
+    pub amount: i64,
     active: bool,
     created_at: NaiveDateTime,
 }
@@ -56,6 +56,7 @@ pub struct Auction {
     description: String,
     until: DateTime<Utc>,
     active: bool,
+    pub winning_bid_id: i64,
     created_at: NaiveDateTime,
 }
 

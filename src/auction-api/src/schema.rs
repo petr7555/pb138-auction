@@ -6,6 +6,7 @@ table! {
         description -> Varchar,
         until -> Timestamptz,
         active -> Bool,
+        winning_bid_id -> Int8,
         created_at -> Timestamp,
     }
 }
