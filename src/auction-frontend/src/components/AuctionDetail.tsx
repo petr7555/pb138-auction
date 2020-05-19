@@ -57,17 +57,21 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
                 showError(error);
             }
         };
+        const active = item && new Date(item.until) > new Date();
 
         return (
             item ?
                 <div>
                     <Descriptions title={item.description}>
+
                         <Descriptions.Item label="Description">{item.description}</Descriptions.Item>
                         <Descriptions.Item label="Seller">{item.user}</Descriptions.Item>
-                        <Descriptions.Item label="Ends in"><Timer until={item.until}/></Descriptions.Item>
+                        {active ? <Descriptions.Item label="Ends in"><Timer until={item.until}/></Descriptions.Item> :
+                            <p>The auction has ended.</p>}
                         <Descriptions.Item label="Current winner">{item.winningUser}</Descriptions.Item>
                         <Descriptions.Item label="Price">${item.actualPrice}</Descriptions.Item>
                     </Descriptions>
+                    {active &&
                     <Form initialValues={{bid: item.actualPrice + 1}}
                           onFinish={onFinish}>
                         <Form.Item
@@ -82,7 +86,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
                                 Place bid
                             </Button>
                         </Form.Item>
-                    </Form>
+                    </Form>}
                 </div>
                 : <Skeleton/>
         )

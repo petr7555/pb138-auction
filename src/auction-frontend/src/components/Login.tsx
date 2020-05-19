@@ -35,11 +35,12 @@ export const Login = observer(() => {
                 user: res.data,
                 loggedIn: true
             });
-            return true;
         } catch (error) {
-            if (error.respose) {
-                if (error.respose.status === 401) {
-                    return false;
+            if (error.response) {
+                console.log(error.response.status);
+                if (error.response.status === 401) {
+                    setError(true);
+                    return;
                 }
             }
             showError(error);
@@ -70,7 +71,7 @@ export const Login = observer(() => {
                 onFinish={onFinishLogin}
                 className="login-form"
             >
-                <Alert message="Error Text" type="error"/>
+                {error && <Alert message="Wrong username or password" type="error"/>}
                 <FormFragment/>
                 <p>Do not have an account? <a onClick={showModal}>Register.</a></p>
                 <Form.Item {...tailLayout}>
