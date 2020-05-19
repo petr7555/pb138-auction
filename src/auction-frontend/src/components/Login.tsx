@@ -20,7 +20,7 @@ const tailLayout = {
 export const Login = observer(() => {
     const userContext = useContext(UserContext);
 
-    const [visible, setVisible] = useState();
+    const [visible, setVisible] = useState<boolean>();
     const [error, setError] = useState(false);
     const [form] = Form.useForm();
 
@@ -71,7 +71,7 @@ export const Login = observer(() => {
                 onFinish={onFinishLogin}
                 className="login-form"
             >
-                {error && <Alert message="Wrong username or password" type="error"/>}
+                {error && <Alert className="login-alert" message="Wrong username or password" type="error"/>}
                 <FormFragment/>
                 <p>Do not have an account? <a onClick={showModal}>Register.</a></p>
                 <Form.Item {...tailLayout}>

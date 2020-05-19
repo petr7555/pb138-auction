@@ -34,7 +34,7 @@ export const DrawerForm = () => {
 
     return (
         <>
-            <Button type="primary" onClick={showDrawer}>
+            <Button className="drawer-form-button" type="primary" onClick={showDrawer}>
                 <PlusOutlined/> New offer
             </Button>
             <Drawer
