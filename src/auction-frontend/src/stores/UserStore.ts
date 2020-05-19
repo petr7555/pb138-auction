@@ -12,7 +12,7 @@ export default class UserStore {
     @action
     async login(username: string, password: string): Promise<void> {
         try {
-            // const res = await fetch(`http://localhost:8080/login/`);
+            // const res = await fetch(`http://localhost:8080/api/login/`);
             // const result = await res.json();
             const result = {
                 id: 1,

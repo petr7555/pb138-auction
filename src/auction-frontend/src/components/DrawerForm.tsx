@@ -18,7 +18,7 @@ export const DrawerForm = () => {
 
     const {userStore} = useStores();
 
-    const onSubmit = useCallback((values) => {
+    const onFinish = useCallback((values) => {
         createAuction({
             userId: userStore.user.id,
             name: values.name,
@@ -53,7 +53,7 @@ export const DrawerForm = () => {
                     </div>
                 }
             >
-                <Form form={form} onFinish={onSubmit} layout="vertical" hideRequiredMark>
+                <Form form={form} onFinish={onFinish} layout="vertical" hideRequiredMark>
                     <Row gutter={16}>
                         <Col span={12}>
                             <Form.Item
