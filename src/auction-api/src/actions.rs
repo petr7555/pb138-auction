@@ -5,9 +5,13 @@ const QUERY_ALL_AUCTIONS: &str = " \
     SELECT auctions.id, auctions.name, auctions.description, users.name as user, auctions.until, bids.amount AS actual_price, users2.name AS winning_user \
     FROM \
         auctions \
-        INNER JOIN users ON auctions.user_id = users.id \
-        LEFT OUTER JOIN (SELECT DISTINCT ON (auction_id) user_id, auction_id, amount FROM bids ORDER BY auction_id, amount DESC) AS bids ON bids.auction_id = auctions.id \
-        LEFT OUTER JOIN users users2 ON bids.user_id = users2.id";
+        INNER JOIN users \
+            ON auctions.user_id = users.id \
+        LEFT OUTER JOIN \
+            (SELECT DISTINCT ON (auction_id) user_id, auction_id, amount FROM bids ORDER BY auction_id, amount DESC) AS bids \
+            ON auctions.id = bids.auction_id \
+        LEFT OUTER JOIN users users2 \
+            ON bids.user_id = users2.id";
 
 pub fn find_user_by_id(
     conn: &PgConnection,
