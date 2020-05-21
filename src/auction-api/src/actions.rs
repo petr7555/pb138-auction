@@ -1,5 +1,17 @@
-use crate::models::{Auction, Bid, NewAuction, NewBid, NewUser, User};
+use crate::models::{Auction, ReturnAuction, Bid, NewAuction, NewBid, NewUser, User};
 use diesel::prelude::*;
+
+const QUERY_ALL_AUCTIONS: &str = " \
+    SELECT auctions.id, auctions.name, auctions.description, users.name as user, auctions.until, bids.amount AS actual_price, users2.name AS winning_user \
+    FROM \
+        auctions \
+        INNER JOIN users \
+            ON auctions.user_id = users.id \
+        LEFT OUTER JOIN \
+            (SELECT DISTINCT ON (auction_id) user_id, auction_id, amount FROM bids ORDER BY auction_id, amount DESC) AS bids \
+            ON auctions.id = bids.auction_id \
+        LEFT OUTER JOIN users users2 \
+            ON bids.user_id = users2.id";
 
 pub fn find_user_by_id(
     conn: &PgConnection,
@@ -18,12 +30,10 @@ pub fn find_user_by_id(
 pub fn find_auction_by_id(
     conn: &PgConnection,
     auction_id: i64,
-) -> Result<Option<Auction>, diesel::result::Error> {
-    use crate::schema::auctions::dsl::*;
+) -> Result<Option<ReturnAuction>, diesel::result::Error> {
 
-    let auction = auctions
-        .filter(id.eq(auction_id))
-        .first::<Auction>(conn)
+    let auction = diesel::sql_query(format!("{} WHERE auctions.id={} LIMIT 1", QUERY_ALL_AUCTIONS, auction_id))
+        .get_result::<ReturnAuction>(conn)
         .optional()?;
 
     Ok(auction)
@@ -62,10 +72,10 @@ pub fn insert_new_user(
     Ok(inserted_user)
 }
 
-pub fn find_all_auctions(conn: &PgConnection) -> Result<Vec<Auction>, diesel::result::Error> {
-    use crate::schema::auctions::dsl::*;
+pub fn find_all_auctions(conn: &PgConnection) -> Result<Vec<ReturnAuction>, diesel::result::Error> {
 
-    let auction_vec = auctions.load(conn)?;
+    let auction_vec = diesel::sql_query(QUERY_ALL_AUCTIONS)
+        .load::<ReturnAuction>(conn)?;
 
     Ok(auction_vec)
 }
@@ -86,19 +96,31 @@ pub fn insert_new_auction(
 pub fn find_auctions_by_user_id(
     conn: &PgConnection,
     user_id: i64,
-) -> Result<Vec<Auction>, diesel::result::Error> {
-    use crate::schema::users::dsl::*;
+) -> Result<Vec<ReturnAuction>, diesel::result::Error> {
 
-    let user = users.find(user_id).first::<User>(conn)?;
-    let auction_vec = Auction::belonging_to(&user).load(conn)?;
+    let auction_vec = diesel::sql_query(format!("{} WHERE users.id={}", QUERY_ALL_AUCTIONS, user_id))
+        .load::<ReturnAuction>(conn)?;
 
     Ok(auction_vec)
 }
 
 pub fn insert_new_bid(conn: &PgConnection, new_bid: &NewBid) -> Result<Bid, diesel::result::Error> {
-    use crate::schema::bids::dsl::*;
+    use crate::schema::*;
 
-    let inserted_bid = diesel::insert_into(bids)
+    let highest_bid_res = bids::dsl::bids
+        .filter(bids::auction_id.eq(new_bid.auction_id))
+        .order((bids::amount, bids::created_at))
+        .first::<Bid>(conn)
+        .optional()?;
+
+    if highest_bid_res.is_some() {
+        let highest_bid = highest_bid_res.unwrap();
+        if highest_bid.amount >= new_bid.amount {
+            return Ok(highest_bid)
+        }
+    }
+
+    let inserted_bid = diesel::insert_into(bids::dsl::bids)
         .values(new_bid)
         .get_result::<Bid>(conn)?;
 
@@ -108,16 +130,10 @@ pub fn insert_new_bid(conn: &PgConnection, new_bid: &NewBid) -> Result<Bid, dies
 pub fn find_auctions_user_taken_part_in(
     conn: &PgConnection,
     searched_user_id: i64,
-) -> Result<Vec<Auction>, diesel::result::Error> {
-    use crate::schema::auctions::dsl::*;
-    use crate::schema::*;
+) -> Result<Vec<ReturnAuction>, diesel::result::Error> {
     
-    let auction_vec = auctions
-    .distinct()
-    .select((id, user_id, name, description, until, active, created_at))
-    .inner_join(bids::dsl::bids)
-    .filter(bids::user_id.eq(searched_user_id))
-    .load(conn)?;
+    let auction_vec = diesel::sql_query(format!("{} WHERE bids.user_id={}", QUERY_ALL_AUCTIONS, searched_user_id))
+        .load::<ReturnAuction>(conn)?;
     
     Ok(auction_vec)
 }

@@ -1,5 +1,5 @@
 use crate::models::{NewAuction, NewUser, NewBid};
-use crate::response::SuccessResponse;
+use crate::response::{SuccessResponse, ErrorResponse};
 use actix_web::{error::BlockingError, post, web, HttpResponse};
 use diesel::r2d2::{ConnectionManager, PooledConnection};
 use diesel::{r2d2, PgConnection};
@@ -78,7 +78,7 @@ pub async fn login_user(
                 return Ok(HttpResponse::Ok().json(user_res))
             }
         }
-        return Ok(HttpResponse::Unauthorized().finish())
+        return Ok(HttpResponse::Unauthorized().json(ErrorResponse::from("unknown user or invalid password".to_owned())))
     }
     return Ok(HttpResponse::InternalServerError().finish())
 }
@@ -112,15 +112,25 @@ pub async fn create_bid(
     let conn = get_conn(pool)?;
 
     let bid = form.into_inner();
+    let user = bid.user_id;
+    let amount = bid.amount;
 
     let res = web::block(move || actions::insert_new_bid(&conn, &bid)).await;
 
-    match process_db_res(res) {
-        Response::OK => 
-            Ok(HttpResponse::Ok().json(SuccessResponse { success: true })),
-        Response::DUPLICATE => 
-            Ok(HttpResponse::Conflict().json(SuccessResponse { success: false })),
-        Response::ERROR => 
-            Ok(HttpResponse::InternalServerError().finish()),
+    match res {
+        Ok(res_bid) => 
+            if res_bid.amount == amount && res_bid.user_id == user {
+                Ok(HttpResponse::Ok().json(SuccessResponse { success: true }))
+            }
+            else {
+                Ok(HttpResponse::Conflict().json(SuccessResponse { success: false }))
+            }
+        Err(err) => match err {
+            BlockingError::Error(diesel_error) => match diesel_error {
+                DatabaseError(UniqueViolation, _msg) => Ok(HttpResponse::Conflict().json(SuccessResponse { success: false })),
+                _ => Ok(HttpResponse::InternalServerError().finish()),
+            },
+            BlockingError::Canceled => Ok(HttpResponse::InternalServerError().finish()),
+        },
     }
 }
