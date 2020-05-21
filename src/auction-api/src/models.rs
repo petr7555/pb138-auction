@@ -69,14 +69,24 @@ pub struct NewAuction {
     pub user_id: i64,
 }
 
-#[derive(Serialize, Queryable)]
-#[derive(Debug)]
+use diesel::sql_types::Text;
+use diesel::sql_types::BigInt;
+use diesel::sql_types::Timestamptz;
+use diesel::sql_types::Nullable;
+#[derive(Serialize, QueryableByName)]
 pub struct ReturnAuction {
+    #[sql_type = "BigInt"]
     pub id: i64,
+    #[sql_type = "Text"]
     name: String,
+    #[sql_type = "Text"]
     description: String,
+    #[sql_type = "Text"]
     user: String,
+    #[sql_type = "Timestamptz"]
     until: DateTime<Utc>,
+    #[sql_type = "Nullable<BigInt>"]
     actual_price: Option<i64>,
-    winning_user_id: Option<i64>,
+    #[sql_type = "Nullable<Text>"]
+    winning_user: Option<String>,
 }
