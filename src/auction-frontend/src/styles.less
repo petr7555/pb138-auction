@@ -1,9 +1,12 @@
 @import '~antd/dist/antd.dark.less';
 @import '~antd/dist/antd.compact.less';
 
-.login-form {
+.main-menu {
   text-align: center;
-  margin: 5rem 3rem;
+}
+
+.main-content {
+  padding: 24px;
 }
 
 .login-title {
@@ -12,12 +15,9 @@
   padding: 0.8rem;
 }
 
-.login-form-username > .ant-form-item-label > label {
-  font-size: 1rem;
-}
-
-.login-form-password > .ant-form-item-label > label {
-  font-size: 1rem;
+.login-form {
+  text-align: center;
+  margin: 5rem 3rem;
 }
 
 .login-alert {
@@ -26,13 +26,35 @@
   left: 33%;
 }
 
-.main-menu {
-  text-align: center;
+///// this should be replaced by setting overall font size of app to larger
+.login-form-username > .ant-form-item-label > label {
+  font-size: 1rem;
 }
 
-.main-content {
-  padding: 24px;
+.login-form-password > .ant-form-item-label > label {
+  font-size: 1rem;
 }
+
+.login-form-username .ant-form-item-control-input-content > input {
+  font-size: 1rem;
+}
+
+.login-form-password .ant-form-item-control-input-content input {
+  font-size: 1rem;
+}
+
+.login-form-username .ant-form-item-explain > div {
+  font-size: 1rem;
+}
+
+.login-form-password .ant-form-item-explain > div {
+  font-size: 1rem;
+}
+
+.login-form__register-text{
+  font-size: 1rem;
+}
+//////
 
 .drawer-form .ant-drawer-content-wrapper {
   max-width: 100%;
@@ -45,7 +67,7 @@
 .button-link {
   border: none;
   background-color: inherit;
-  font-size: @font-size-base;
+  font-size: 1rem;
   color: @primary-color;
   cursor: pointer;
   display: inline-block;

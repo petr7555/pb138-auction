@@ -47,8 +47,16 @@ export const Login = observer(() => {
         }
     };
 
-    const onFinishRegister = (values: Store): void => {
+    const onFinishRegister = async (values: Store) => {
         console.log(values.username, values.password);
+        try {
+            const res = await axios.post('http://localhost:8080/api/register', {
+                name: values.username,
+                password: values.password
+            });
+        } catch (error) {
+            showError(error);
+        }
         form.resetFields();
         setVisible(false);
     };
@@ -73,7 +81,8 @@ export const Login = observer(() => {
             >
                 {error && <Alert className="login-alert" message="Wrong username or password" type="error"/>}
                 <FormFragment/>
-                <p>Do not have an account? <button className="button-link" onClick={showModal}>Register</button></p>
+                <p className="login-form__register-text">Do not have an account? <a onClick={showModal}>Register.</a>
+                </p>
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit" className="login-form__button" size="large">
                         Log in

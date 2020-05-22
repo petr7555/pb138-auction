@@ -35,7 +35,7 @@ export const Nav = withRouter((props) => {
                         <span>My Auctions</span>
                     </Link>
                 </Menu.Item>
-                <Button icon={<LogoutOutlined/>} onClick={logout}>Log out</Button>
+                <Button icon={<LogoutOutlined/>} onClick={logout} style={{marginLeft: "20px"}}>Log out</Button>
             </Menu>
         </div>
     )
