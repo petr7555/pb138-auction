@@ -74,6 +74,7 @@ use diesel::sql_types::BigInt;
 use diesel::sql_types::Timestamptz;
 use diesel::sql_types::Nullable;
 #[derive(Serialize, QueryableByName)]
+#[serde(rename_all = "camelCase")]
 pub struct ReturnAuction {
     #[sql_type = "BigInt"]
     pub id: i64,
