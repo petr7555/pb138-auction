@@ -2,6 +2,10 @@ use crate::schema::{auctions, bids, users};
 use chrono::{DateTime, NaiveDateTime, Utc};
 use getset::Getters;
 use serde::{Deserialize, Serialize};
+use diesel::sql_types::Text;
+use diesel::sql_types::BigInt;
+use diesel::sql_types::Timestamptz;
+use diesel::sql_types::Nullable;
 
 #[derive(Identifiable, Serialize, Queryable, Getters)]
 #[serde(rename_all = "camelCase")]
@@ -69,10 +73,6 @@ pub struct NewAuction {
     pub user_id: i64,
 }
 
-use diesel::sql_types::Text;
-use diesel::sql_types::BigInt;
-use diesel::sql_types::Timestamptz;
-use diesel::sql_types::Nullable;
 #[derive(Serialize, QueryableByName)]
 #[serde(rename_all = "camelCase")]
 pub struct ReturnAuction {
