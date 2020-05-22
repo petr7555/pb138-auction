@@ -73,12 +73,12 @@ export const Login = observer(() => {
             >
                 {error && <Alert className="login-alert" message="Wrong username or password" type="error"/>}
                 <FormFragment/>
-                <p>Do not have an account? <button className="button-link" onClick={showModal}>Register</button></p>
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit" className="login-form__button" size="large">
                         Log in
                     </Button>
                 </Form.Item>
+                <p>Do not have an account? <button className="button-link" onClick={showModal}>Register</button></p>
             </Form>
             <Modal
                 title="Register"

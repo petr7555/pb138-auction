@@ -9,7 +9,7 @@ export const FormFragment = () => {
                 label="Username"
                 name="username"
                 rules={[{required: true, message: 'Please input your username!'}]}
-                className="login-form-username"
+                className="login-form-username login-form-field"
             >
                 <Input/>
             </Form.Item>
@@ -18,7 +18,7 @@ export const FormFragment = () => {
                 label="Password"
                 name="password"
                 rules={[{required: true, message: 'Please input your password!'}]}
-                className="login-form-password"
+                className="login-form-password login-form-field"
             >
                 <Input.Password/>
             </Form.Item>
