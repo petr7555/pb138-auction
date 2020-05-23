@@ -2,7 +2,7 @@ use crate::models::{Auction, ReturnAuction, Bid, NewAuction, NewBid, NewUser, Us
 use diesel::prelude::*;
 
 const QUERY_ALL_AUCTIONS: &str = " \
-    SELECT auctions.id, auctions.name, auctions.description, users.name as user, auctions.until, bids.amount AS actual_price, users2.name AS winning_user \
+    SELECT auctions.id, auctions.name, auctions.description, users.name as user, auctions.until, COALESCE(bids.amount, 0) AS actual_price, users2.name AS winning_user \
     FROM \
         auctions \
         INNER JOIN users \

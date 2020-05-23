@@ -1,6 +1,7 @@
 use crate::models::{NewAuction, NewUser, NewBid};
 use crate::response::{SuccessResponse, ErrorResponse};
 use actix_web::{error::BlockingError, post, web, HttpResponse};
+use actix_identity::Identity;
 use diesel::r2d2::{ConnectionManager, PooledConnection};
 use diesel::{r2d2, PgConnection};
 
@@ -66,8 +67,14 @@ pub async fn register_user(
 pub async fn login_user(
     pool: web::Data<DbPool>,
     form: web::Json<NewUser>,
+    id: Identity,
 ) -> Result<HttpResponse, actix_web::Error> {
+    if let Some(_) = id.identity() {
+        return Ok(HttpResponse::Ok().finish())
+    }
+
     let conn = get_conn(pool)?;
+
 
     let user = form.into_inner();
     let user_moved = user.clone();
@@ -75,6 +82,8 @@ pub async fn login_user(
     if let Ok(user_res) = res {
         if let Some(user_res) = user_res {
             if user.password() == user_res.password() {
+                id.remember(user.name.clone());
+                println!("Remembering: {}", user.name);
                 return Ok(HttpResponse::Ok().json(user_res))
             }
         }

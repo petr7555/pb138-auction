@@ -5,6 +5,8 @@ extern crate diesel;
 extern crate diesel_migrations;
 
 use actix_web::{middleware, App, HttpServer};
+use actix_identity::{CookieIdentityPolicy, IdentityService};
+
 use diesel::r2d2::ConnectionManager;
 use diesel::{r2d2, PgConnection};
 use diesel_migrations::embed_migrations;
@@ -109,11 +111,19 @@ async fn main() -> std::io::Result<()> {
             .data(pool.clone())
             .wrap(middleware::Logger::default())
             .wrap(actix_cors::Cors::default())
+            .wrap(
+                IdentityService::new(
+                    CookieIdentityPolicy::new(&[0; 32])
+                    .name("auth-cookie")
+                    .secure(false)
+                )
+            )
             .service(get::user)
             .service(get::auction)
             .service(get::all_auctions)
             .service(get::all_auctions_user_created)
             .service(get::auctions_taken_part_user)
+            .service(get::logout_user)
             .service(post::register_user)
             .service(post::login_user)
             .service(post::create_auction)

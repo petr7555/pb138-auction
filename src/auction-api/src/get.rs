@@ -1,5 +1,6 @@
 use crate::response::ErrorResponse;
 use actix_web::{get, web, HttpResponse};
+use actix_identity::Identity;
 use diesel::r2d2::ConnectionManager;
 use diesel::r2d2::PooledConnection;
 use diesel::{r2d2, PgConnection};
@@ -117,4 +118,11 @@ pub async fn auctions_taken_part_user(
         })?;
 
     Ok(HttpResponse::Ok().json(auctions))
+}
+
+#[get("/api/logout")]
+pub async fn logout_user(id: Identity) -> Result<HttpResponse, actix_web::Error> {
+    println!("Forgetting: {}", id.identity().unwrap_or("None".into()));
+    id.forget();
+    Ok(HttpResponse::Ok().finish())
 }
