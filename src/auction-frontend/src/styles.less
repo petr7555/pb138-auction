@@ -1,0 +1,74 @@
+@import '~antd/dist/antd.dark.less';
+@import '~antd/dist/antd.compact.less';
+
+.main-menu {
+  text-align: center;
+}
+
+.main-content {
+  padding: 24px;
+}
+
+.login-form {
+  text-align: center;
+  margin: 5rem 3rem;
+}
+
+.login-title {
+  text-align: center;
+  background-color: @primary-color;
+  padding: 0.8rem;
+}
+
+.login-form .ant-form-item-explain {
+  margin: 0.1rem;
+}
+
+.login-alert {
+  margin: 1rem;
+  width: fit-content;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.main-menu {
+  text-align: center;
+}
+
+.main-content {
+  padding: 24px;
+}
+
+.drawer-form .ant-drawer-content-wrapper {
+  max-width: 100%;
+}
+
+.drawer-form-button {
+  margin: 1rem 0.25rem;
+}
+
+.button-link {
+  border: none;
+  background-color: inherit;
+  font-size: @font-size-base;
+  color: @primary-color;
+  cursor: pointer;
+  display: inline-block;
+  transition-duration: 0.4s;
+}
+
+.button-link:hover {
+  color: @primary-5;
+}
+
+.button-link:focus {
+  outline: 0;
+}
+
+// hide divider on small screens, because "participating in" and "my offerings" are below each other
+@media (max-width: 575px) {
+  .my-auctions-divider {
+    display: none;
+  }
+}
+

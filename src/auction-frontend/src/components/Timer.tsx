@@ -52,6 +52,6 @@ export const Timer = ({until}: Props) => {
         timerComponents.push(`${timeLeft[interval]} ${interval} `);
     });
     return (
-        <p>{timerComponents.length ? <span>Ends in: {timerComponents}</span> : <span>Time's up!</span>}</p>
+        <p>{timerComponents.length ? <span>Ends in: {timerComponents}</span> : <span>The auction has ended</span>}</p>
     )
 };

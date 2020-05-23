@@ -1,9 +1,11 @@
-import React from "react";
-import {observer} from "mobx-react-lite";
-import {useStores} from "../hooks/use-stores";
-import {Button, Form, Input} from 'antd';
-import {Store} from "antd/lib/form/interface";
-import {Typography} from "antd";
+import React, { useContext, useState } from "react";
+import { observer } from "mobx-react-lite";
+import { Alert, Button, Form, Modal, Typography } from 'antd';
+import { Store } from "antd/lib/form/interface";
+import { FormFragment } from "./FormFragment";
+import { showError } from "../api/apiCalls";
+import axios from 'axios';
+import { UserContext } from "../App";
 
 const {Title} = Typography;
 
@@ -12,41 +14,90 @@ const layout = {
     wrapperCol: {span: 5},
 };
 const tailLayout = {
-    wrapperCol: {offset: 10, flex: "auto"},
+    wrapperCol: {flex: "auto"},
 };
 
 export const Login = observer(() => {
-    const {userStore} = useStores();
+    const userContext = useContext(UserContext);
 
-    const onFinish = (values: Store): void => {
-        userStore.login(values.username);
+    const [visible, setVisible] = useState<boolean>();
+    const [error, setError] = useState(false);
+    const [form] = Form.useForm();
+
+    const onFinishLogin = async (values: Store) => {
+        try {
+            const res = await axios.post('http://localhost:8080/api/login', {
+                name: values.username,
+                password: values.password
+            });
+            userContext.setUserState({
+                user: res.data,
+                loggedIn: true
+            });
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 401) {
+                    setError(true);
+                    return;
+                }
+            }
+            showError(error);
+        }
     };
+
+    const onFinishRegister = async (values: Store) => {
+        try {
+            const res = await axios.post('http://localhost:8080/api/register', {
+                name: values.username,
+                password: values.password
+            });
+        } catch (error) {
+            showError(error);
+        }
+        form.resetFields();
+        setVisible(false);
+    };
+
+    const showModal = () => {
+        setVisible(true);
+    }
+
+    const closeModal = () => {
+        setVisible(false);
+    }
 
     return (
         <div>
-            <Title className="login-title">Auction system</Title>
+            <Title className="login-title">The BESTEST auction system</Title>
             <Form
                 {...layout}
                 name="basic"
                 initialValues={{username: ""}}
-                onFinish={onFinish}
+                onFinish={onFinishLogin}
                 className="login-form"
             >
-                <Form.Item
-                    label="Username"
-                    name="username"
-                    rules={[{required: true, message: 'Please input your username!'}]}
-                    className="login-form-username"
-                >
-                    <Input/>
-                </Form.Item>
-
+                {error && <Alert className="login-alert" message="Wrong username or password" type="error"/>}
+                <FormFragment/>
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit" className="login-form__button" size="large">
-                        Submit
+                        Log in
                     </Button>
                 </Form.Item>
+                <p>Do not have an account? <button className="button-link" onClick={showModal}>Register</button></p>
             </Form>
+            <Modal
+                title="Register"
+                visible={visible}
+                onOk={form.submit}
+                onCancel={closeModal}
+            >
+                <Form
+                    form={form}
+                    onFinish={onFinishRegister}
+                >
+                    <FormFragment/>
+                </Form>
+            </Modal>
         </div>
     );
 })

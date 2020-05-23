@@ -1,11 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Button, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createAuction } from "../api/apiCalls";
-import { useStores } from "../hooks/use-stores";
+import { UserContext } from "../App";
+import moment from "moment";
 
-export const DrawerForm = () => {
+// @ts-ignore
+export const DrawerForm = ({refresh}) => {
     const [visible, setVisible] = useState(false);
 
     const showDrawer = () => {
@@ -16,29 +18,37 @@ export const DrawerForm = () => {
         setVisible(false);
     };
 
-    const {userStore} = useStores();
+    const userContext = useContext(UserContext);
 
-    const onSubmit = useCallback((values) => {
+    // @ts-ignore
+    const onFinish = (values) => {
         createAuction({
-            userId: userStore.id,
+            userId: userContext.userState.user.id,
             name: values.name,
             description: values.description,
             until: values.until.toISOString()
-        });
+        }).then(refresh);
         form.resetFields();
         setVisible(false);
-    }, []);
+    }
 
     const [form] = Form.useForm();
 
+    // @ts-ignore
+    function disabledDate(current) {
+        // Can not select days before today
+        return current && current < moment().startOf('day');
+    }
+
     return (
         <>
-            <Button type="primary" onClick={showDrawer}>
+            <Button className="drawer-form-button" type="primary" onClick={showDrawer}>
                 <PlusOutlined/> New offer
             </Button>
             <Drawer
-                title="Create a new auction"
+                className="drawer-form"
                 width={720}
+                title="Create a new auction"
                 onClose={onClose}
                 visible={visible}
                 bodyStyle={{paddingBottom: 80}}
@@ -53,7 +63,7 @@ export const DrawerForm = () => {
                     </div>
                 }
             >
-                <Form form={form} onFinish={onSubmit} layout="vertical" hideRequiredMark>
+                <Form form={form} onFinish={onFinish} layout="vertical" hideRequiredMark>
                     <Row gutter={16}>
                         <Col span={12}>
                             <Form.Item
@@ -68,9 +78,17 @@ export const DrawerForm = () => {
                             <Form.Item
                                 name="until"
                                 label="Ends at"
-                                rules={[{required: true, message: 'Please choose the end of the auction'}]}
+                                rules={[{required: true, message: 'Please choose the end of the auction'},
+                                    () => ({
+                                        validator(rule, value) {
+                                            if (!value || value >= moment().add(1, 'minute')) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject('The duration must be at least 1 minute');
+                                        },
+                                    })]}
                             >
-                                <DatePicker showTime/>
+                                <DatePicker showTime disabledDate={disabledDate}/>
                             </Form.Item>
                         </Col>
                     </Row>

@@ -1,26 +1,46 @@
 import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import AuctionItem from "../entitites/AuctionItem";
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Row, Skeleton } from "antd";
 import { Item } from "./Item";
-import { getMockAuctions } from "../mocks/mocks";
+import { UserContext } from "../App";
+import { useDataApi } from "../api/useDataApi";
 
 export const ParticipatingAuctions = observer(() => {
+    const userContext = useContext(UserContext);
 
-    const [auctions, setAuctions] = useState(getMockAuctions);
+    const [{data, isLoading, isError}, doFetch] = useDataApi(
+        `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,
+        [],
+    );
 
     return (
         <div>
-            <Divider><h2>Participating auctions</h2></Divider>
-            <Row gutter={[16, 16]}>
-                {auctions.map((auction: AuctionItem) => {
-                    return (
-                        <Col xs={24}>
-                            <Item item={auction} key={auction.id}/>
-                        </Col>
-                    )
-                })}
-            </Row>
+            <Divider><h2>Participating in</h2></Divider>
+            {isLoading ? (
+                <Row gutter={[16, 16]}>
+                    {[1,2,3].map(() => {
+                        return (
+                            <Col xs={24}>
+                                <Skeleton/>
+                            </Col>
+                        )
+                    })}
+                </Row>) : (
+                <>
+                    {data.length === 0 ? <p>You did not bid in any auction. Go ahead and bid in one!</p> :
+                        <Row gutter={[16, 16]}>
+                            {data.map((auction: AuctionItem) => {
+                                return (
+                                    <Col xs={24}>
+                                        <Item item={auction} key={auction.id}/>
+                                    </Col>
+                                )
+                            })}
+                        </Row>
+                    }
+                </>
+            )}
         </div>
     )
 });
