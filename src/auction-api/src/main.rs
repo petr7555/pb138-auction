@@ -110,7 +110,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .data(pool.clone())
             .wrap(middleware::Logger::default())
-            .wrap(actix_cors::Cors::default())
+            .wrap(actix_cors::Cors::new().supports_credentials().finish())
             .wrap(
                 IdentityService::new(
                     CookieIdentityPolicy::new(&[0; 32])
