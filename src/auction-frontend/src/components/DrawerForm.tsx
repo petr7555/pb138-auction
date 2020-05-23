@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Button, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createAuction } from "../api/apiCalls";
 import { UserContext } from "../App";
+import moment from "moment";
 
 // @ts-ignore
 export const DrawerForm = ({refresh}) => {
@@ -32,6 +33,12 @@ export const DrawerForm = ({refresh}) => {
     }
 
     const [form] = Form.useForm();
+
+    // @ts-ignore
+    function disabledDate(current) {
+        // Can not select days before today
+        return current && current < moment().startOf('day');
+    }
 
     return (
         <>
@@ -71,9 +78,17 @@ export const DrawerForm = ({refresh}) => {
                             <Form.Item
                                 name="until"
                                 label="Ends at"
-                                rules={[{required: true, message: 'Please choose the end of the auction'}]}
+                                rules={[{required: true, message: 'Please choose the end of the auction'},
+                                    () => ({
+                                        validator(rule, value) {
+                                            if (!value || value >= moment().add(1, 'minute')) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject('The duration must be at least 1 minute');
+                                        },
+                                    })]}
                             >
-                                <DatePicker showTime/>
+                                <DatePicker showTime disabledDate={disabledDate}/>
                             </Form.Item>
                         </Col>
                     </Row>
