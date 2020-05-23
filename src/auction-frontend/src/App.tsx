@@ -10,7 +10,6 @@ export const App = observer(() => {
     const [userState, setUserState] = useState({loggedIn: false});
 
     return (
-        // @ts-ignore
         <UserContext.Provider value={{userState, setUserState}}>
             <div className="App">
                 {userState.loggedIn ? <Main/> : <Login/>}

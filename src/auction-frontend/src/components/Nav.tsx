@@ -10,9 +10,7 @@ export const Nav = withRouter((props) => {
     const userContext = useContext(UserContext);
 
     const logout = (): void => {
-        // @ts-ignore
         userContext.setUserState({
-            // @ts-ignore
             ...userContext.userState,
             loggedIn: false
         })

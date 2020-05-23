@@ -30,7 +30,6 @@ export const Login = observer(() => {
                 name: values.username,
                 password: values.password
             });
-            // @ts-ignore
             userContext.setUserState({
                 user: res.data,
                 loggedIn: true

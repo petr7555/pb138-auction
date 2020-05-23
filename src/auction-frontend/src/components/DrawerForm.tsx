@@ -1,11 +1,12 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Button, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createAuction } from "../api/apiCalls";
 import { UserContext } from "../App";
 
-export const DrawerForm = () => {
+// @ts-ignore
+export const DrawerForm = ({refresh}) => {
     const [visible, setVisible] = useState(false);
 
     const showDrawer = () => {
@@ -18,17 +19,17 @@ export const DrawerForm = () => {
 
     const userContext = useContext(UserContext);
 
-    const onFinish = useCallback((values) => {
+    // @ts-ignore
+    const onFinish = (values) => {
         createAuction({
-            // @ts-ignore
             userId: userContext.userState.user.id,
             name: values.name,
             description: values.description,
             until: values.until.toISOString()
-        });
+        }).then(refresh);
         form.resetFields();
         setVisible(false);
-    }, []);
+    }
 
     const [form] = Form.useForm();
 

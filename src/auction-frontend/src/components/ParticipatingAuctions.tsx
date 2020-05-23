@@ -3,14 +3,13 @@ import React, { useContext } from "react";
 import AuctionItem from "../entitites/AuctionItem";
 import { Col, Divider, Row } from "antd";
 import { Item } from "./Item";
-import useDataApi from "use-data-api";
 import { UserContext } from "../App";
+import { useDataApi } from "../api/useDataApi";
 
 export const ParticipatingAuctions = observer(() => {
     const userContext = useContext(UserContext);
 
     const [{data, isLoading, isError}, doFetch] = useDataApi(
-        // @ts-ignore
         `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,
         [],
     );

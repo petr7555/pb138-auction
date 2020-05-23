@@ -4,7 +4,6 @@ import { ParticipatingAuctions } from "./ParticipatingAuctions";
 import { MyOfferings } from "./MyOfferings";
 
 export const MyAuctions = () => {
-    console.log(window.innerWidth);
     return (
         <Row>
             <Col xs={24} sm={12} md={8} lg={8} xxl={8}>

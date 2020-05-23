@@ -2,7 +2,7 @@ import React from "react";
 import { Item } from "./Item";
 import AuctionItem from "../entitites/AuctionItem";
 import { Col, Row } from "antd";
-import useDataApi from 'use-data-api';
+import { useDataApi } from "../api/useDataApi";
 
 export const Auctions = () => {
     const [{data, isLoading, isError}, doFetch] = useDataApi(

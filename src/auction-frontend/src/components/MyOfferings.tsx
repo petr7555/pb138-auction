@@ -4,14 +4,13 @@ import AuctionItem from "../entitites/AuctionItem";
 import { Col, Divider, Row } from "antd";
 import { Item } from "./Item";
 import { DrawerForm } from "./DrawerForm";
-import useDataApi from "use-data-api";
 import { UserContext } from "../App";
+import { useDataApi } from "../api/useDataApi";
 
 export const MyOfferings = observer(() => {
     const userContext = useContext(UserContext);
 
     const [{data, isLoading, isError}, doFetch] = useDataApi(
-        // @ts-ignore
         `http://localhost:8080/api/auctions/user/${userContext.userState.user.id}`,
         [],
     );
@@ -19,7 +18,7 @@ export const MyOfferings = observer(() => {
     return (
         <div>
             <Divider><h2>My offerings</h2></Divider>
-            <DrawerForm/>
+            <DrawerForm refresh={doFetch}/>
             {data.length === 0 ? <p>You do not have any auctions. Go ahead and create one!</p> :
                 <Row gutter={[16, 16]}>
                     {data.map((auction: AuctionItem) => {
