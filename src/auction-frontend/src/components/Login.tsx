@@ -28,8 +28,8 @@ export const Login = observer(() => {
         try {
             const res = await axios.post('http://localhost:8080/api/login', {
                 name: values.username,
-                password: values.password
-            });
+                password: values.password,
+            }, {withCredentials: true});
             userContext.setUserState({
                 user: res.data,
                 loggedIn: true

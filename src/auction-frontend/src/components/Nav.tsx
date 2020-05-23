@@ -3,17 +3,28 @@ import { Button, Menu } from "antd";
 import { HourglassOutlined, IdcardOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
 import { UserContext } from "../App";
+import axios from 'axios';
+import { showError } from "../api/apiCalls";
 
 export const Nav = withRouter((props) => {
     const {location} = props;
 
     const userContext = useContext(UserContext);
 
-    const logout = (): void => {
-        userContext.setUserState({
-            ...userContext.userState,
-            loggedIn: false
-        })
+    const logout = async (): Promise<void> => {
+        try {
+            const test = await axios.get('http://localhost:8080/api/logout',
+            {
+                withCredentials: true
+            });
+            console.log(test)
+            userContext.setUserState({
+                ...userContext.userState,
+                loggedIn: false
+            })
+        } catch (error) {
+            showError(error);
+        }
     };
 
     return (
