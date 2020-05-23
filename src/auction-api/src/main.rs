@@ -4,8 +4,8 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-use actix_web::{middleware, App, HttpServer};
 use actix_identity::{CookieIdentityPolicy, IdentityService};
+use actix_web::{middleware, App, HttpServer};
 
 use diesel::r2d2::ConnectionManager;
 use diesel::{r2d2, PgConnection};
@@ -20,14 +20,12 @@ mod schema;
 
 embed_migrations!();
 
-
 async fn initial_data(conn: &PgConnection) {
-
     if actions::find_user_by_name(conn, "Joe").unwrap().is_some() {
         println!("database is not empty, skipping data init");
         return;
     }
-    
+
     let new_user = models::NewUser {
         name: "Joe".to_owned(),
         password: "1234".to_owned(),
@@ -88,10 +86,8 @@ async fn initial_data(conn: &PgConnection) {
     let _bid2 = actions::insert_new_bid(conn, &new_bid_2).unwrap();
 }
 
-
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
-
     let connspec = std::env::var("DATABASE_URL").expect("DATABASE_URL");
     let manager = ConnectionManager::<PgConnection>::new(connspec);
     let pool = r2d2::Pool::builder()
@@ -110,14 +106,16 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .data(pool.clone())
             .wrap(middleware::Logger::default())
-            .wrap(actix_cors::Cors::new().supports_credentials().finish())
             .wrap(
-                IdentityService::new(
-                    CookieIdentityPolicy::new(&[0; 32])
-                    .name("auth-cookie")
-                    .secure(false)
-                )
+                actix_cors::Cors::new()
+                    .supports_credentials()
+                    .finish()
             )
+            .wrap(IdentityService::new(
+                CookieIdentityPolicy::new(&[0; 32])
+                    .name("auth-cookie")
+                    .secure(false),
+            ))
             .service(get::user)
             .service(get::auction)
             .service(get::all_auctions)
