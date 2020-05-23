@@ -36,10 +36,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
         }
 
         useEffect(() => {
-            // simulate network delay
-            setTimeout(() => {
-                fetchItem();
-            }, 1000)
+            fetchItem();
         }, [])
 
 
@@ -70,22 +67,22 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
                         <Descriptions.Item label="Current winner">{item.winningUser}</Descriptions.Item>
                         <Descriptions.Item label="Price">${item.actualPrice}</Descriptions.Item>
                     </Descriptions>
-                    {active &&
-                    <Form initialValues={{bid: item.actualPrice + 1}}
-                          onFinish={onFinish}>
-                        <Form.Item
-                            name={"bid"}>
-                            <InputNumber
-                                min={item.actualPrice + 1}
-                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Place bid
-                            </Button>
-                        </Form.Item>
-                    </Form>}
+                    {active && (item.user !== userContext.userState.user.name ?
+                        (<Form initialValues={{bid: item.actualPrice + 1}}
+                               onFinish={onFinish}>
+                            <Form.Item
+                                name={"bid"}>
+                                <InputNumber
+                                    min={item.actualPrice + 1}
+                                    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Place bid
+                                </Button>
+                            </Form.Item>
+                        </Form>) : <p>You can't bid on your own auction</p>)}
                 </div>
                 : <Skeleton/>
         )

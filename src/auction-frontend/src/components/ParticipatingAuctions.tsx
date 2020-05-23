@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import AuctionItem from "../entitites/AuctionItem";
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Row, Skeleton } from "antd";
 import { Item } from "./Item";
 import { UserContext } from "../App";
 import { useDataApi } from "../api/useDataApi";
@@ -17,17 +17,30 @@ export const ParticipatingAuctions = observer(() => {
     return (
         <div>
             <Divider><h2>Participating in</h2></Divider>
-            {data.length === 0 ? <p>You did not bid in any auction. Go ahead and bid in one!</p> :
+            {isLoading ? (
                 <Row gutter={[16, 16]}>
-                    {data.map((auction: AuctionItem) => {
+                    {[1,2,3].map(() => {
                         return (
                             <Col xs={24}>
-                                <Item item={auction} key={auction.id}/>
+                                <Skeleton/>
                             </Col>
                         )
                     })}
-                </Row>
-            }
+                </Row>) : (
+                <>
+                    {data.length === 0 ? <p>You did not bid in any auction. Go ahead and bid in one!</p> :
+                        <Row gutter={[16, 16]}>
+                            {data.map((auction: AuctionItem) => {
+                                return (
+                                    <Col xs={24}>
+                                        <Item item={auction} key={auction.id}/>
+                                    </Col>
+                                )
+                            })}
+                        </Row>
+                    }
+                </>
+            )}
         </div>
     )
 });

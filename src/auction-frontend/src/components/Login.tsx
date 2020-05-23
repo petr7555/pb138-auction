@@ -36,7 +36,6 @@ export const Login = observer(() => {
             });
         } catch (error) {
             if (error.response) {
-                console.log(error.response.status);
                 if (error.response.status === 401) {
                     setError(true);
                     return;
@@ -47,7 +46,6 @@ export const Login = observer(() => {
     };
 
     const onFinishRegister = async (values: Store) => {
-        console.log(values.username, values.password);
         try {
             const res = await axios.post('http://localhost:8080/api/register', {
                 name: values.username,
