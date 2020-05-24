@@ -44,7 +44,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
             try {
                 const response = await axios.post("http://localhost:8080/api/bids", {
                     userId: userContext.userState.user.id,
-                    auctionId: item?.id,
+                    auctionId: item.id,
                     amount: values.bid
                 });
                 await fetchItem();

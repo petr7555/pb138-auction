@@ -23,14 +23,3 @@ export const createAuction = async (auction: NewAuction) => {
         showError(error);
     }
 }
-
-export const createInitialAuctions = () => {
-    for (let i = 1; i < 6; ++i) {
-        createAuction({
-            userId: 1,
-            name: `auction name ${i}`,
-            description: `auction description ${i}`,
-            until: new Date("2020/05/" + (20 + i)).toISOString()
-        })
-    }
-}

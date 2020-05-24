@@ -14,6 +14,15 @@ export const ParticipatingAuctions = observer(() => {
         [],
     );
 
+    const [{data: participatingAuctions}] = useDataApi(
+        `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,
+        [],
+    );
+
+    const isLoosing = (auction: AuctionItem) => {
+        return participatingAuctions.includes(auction) && auction.winningUser !== userContext.userState.user.name;
+    }
+
     return (
         <div>
             <Divider><h2>Participating in</h2></Divider>
@@ -33,7 +42,7 @@ export const ParticipatingAuctions = observer(() => {
                             {data.map((auction: AuctionItem) => {
                                 return (
                                     <Col xs={24}>
-                                        <Item item={auction} key={auction.id}/>
+                                        <Item item={auction} key={auction.id} loosing={isLoosing(auction)}/>
                                     </Col>
                                 )
                             })}

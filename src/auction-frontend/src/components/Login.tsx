@@ -34,6 +34,8 @@ export const Login = observer(() => {
                 user: res.data,
                 loggedIn: true
             });
+            console.log(res.data);
+
         } catch (error) {
             if (error.response) {
                 if (error.response.status === 401) {
