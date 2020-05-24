@@ -72,13 +72,13 @@ async fn initial_data(conn: &PgConnection) {
 
     let new_bid = models::NewBid {
         user_id: user3.id,
-        auction_id: auction3.id,
+        auction_id: *auction3.id(),
         amount: 200,
     };
 
     let new_bid_2 = models::NewBid {
         user_id: user3.id,
-        auction_id: auction4.id,
+        auction_id: *auction4.id(),
         amount: 100,
     };
 

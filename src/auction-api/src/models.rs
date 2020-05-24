@@ -41,20 +41,22 @@ pub struct Bid {
     created_at: NaiveDateTime,
 }
 
-#[derive(Deserialize, Insertable)]
+#[derive(Deserialize, Insertable, Getters)]
 #[serde(rename_all = "camelCase")]
 #[table_name = "bids"]
 pub struct NewBid {
+    #[getset(get = "pub")]
     pub user_id: i64,
     pub auction_id: i64,
     pub amount: i64,
 }
 
-#[derive(Identifiable, Serialize, Queryable, Associations)]
+#[derive(Identifiable, Serialize, Queryable, Associations, Getters)]
 #[serde(rename_all = "camelCase")]
 #[belongs_to(User)]
 pub struct Auction {
-    pub id: i64,
+    #[getset(get = "pub")]
+    id: i64,
     user_id: i64,
     name: String,
     description: String,
@@ -63,13 +65,14 @@ pub struct Auction {
     created_at: NaiveDateTime,
 }
 
-#[derive(Deserialize, Insertable)]
+#[derive(Deserialize, Insertable, Getters)]
 #[serde(rename_all = "camelCase")]
 #[table_name = "auctions"]
 pub struct NewAuction {
     pub name: String,
     pub description: String,
     pub until: DateTime<Utc>,
+    #[getset(get = "pub")]
     pub user_id: i64,
 }
 

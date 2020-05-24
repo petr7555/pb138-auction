@@ -59,7 +59,7 @@ pub async fn register_user(
         Response::DUPLICATE => 
             Ok(HttpResponse::Conflict().json(SuccessResponse { success: false })),
         Response::ERROR => 
-            Ok(HttpResponse::InternalServerError().finish()),
+            Err(HttpResponse::InternalServerError().finish().into()),
     }
 }
 
@@ -75,31 +75,43 @@ pub async fn login_user(
 
     let conn = get_conn(pool)?;
 
-
     let user = form.into_inner();
     let user_moved = user.clone();
     let res = web::block(move || actions::find_user_by_name(&conn, user_moved.name())).await;
     if let Ok(user_res) = res {
         if let Some(user_res) = user_res {
             if user.password() == user_res.password() {
-                id.remember(user.name.clone());
-                println!("Remembering: {}", user.name);
+                id.remember(user_res.id.to_string());
                 return Ok(HttpResponse::Ok().json(user_res))
             }
         }
         return Ok(HttpResponse::Unauthorized().json(ErrorResponse::from("unknown user or invalid password".to_owned())))
     }
-    return Ok(HttpResponse::InternalServerError().finish())
+    return Err(HttpResponse::InternalServerError().finish().into())
+}
+
+fn auction_identity_check(id: Identity, auction: &NewAuction) -> Result<(), HttpResponse> {
+    if let None = id.identity() {
+        return Err(HttpResponse::Unauthorized().json(ErrorResponse::from("Authorization required".to_owned())))
+    }
+    let id = id.identity().unwrap().parse::<i64>().unwrap();
+    if id != *auction.user_id() {
+        return Err(HttpResponse::Unauthorized().json(ErrorResponse::from("Wrong user making auction".to_owned())))
+    }
+    Ok(())
 }
 
 #[post("/api/auctions")]
 pub async fn create_auction(
     pool: web::Data<DbPool>,
     form: web::Json<NewAuction>,
+    id: Identity,
 ) -> Result<HttpResponse, actix_web::Error> {
-    let conn = get_conn(pool)?;
-
     let auction = form.into_inner();
+
+    auction_identity_check(id, &auction)?;
+
+    let conn = get_conn(pool)?;
 
     let res = web::block(move || actions::insert_new_auction(&conn, &auction)).await;
 
@@ -113,14 +125,29 @@ pub async fn create_auction(
     }
 }
 
+fn bid_identity_check(id: Identity, bid: &NewBid) -> Result<(), HttpResponse> {
+    if let None = id.identity() {
+        return Err(HttpResponse::Unauthorized().json(ErrorResponse::from("Authorization required".to_owned())))
+    }
+    let id = id.identity().unwrap().parse::<i64>().unwrap();
+    if id != *bid.user_id() {
+        return Err(HttpResponse::Unauthorized().json(ErrorResponse::from("Wrong user making bid".to_owned())))
+    }
+    Ok(())
+}
+
 #[post("/api/bids")]
 pub async fn create_bid(
     pool: web::Data<DbPool>,
     form: web::Json<NewBid>,
+    id: Identity,
 ) -> Result<HttpResponse, actix_web::Error> {
+    let bid = form.into_inner();
+
+    bid_identity_check(id, &bid)?;
+
     let conn = get_conn(pool)?;
 
-    let bid = form.into_inner();
     let user = bid.user_id;
     let amount = bid.amount;
 
