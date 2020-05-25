@@ -63,7 +63,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
                                onFinish={onFinish}>
                             <Form.Item
                                 name={"bid"}>
-                                <InputNumber
+                                <InputNumber style={{width: "200px"}}
                                     min={item.actualPrice + 1}
                                     formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 />
