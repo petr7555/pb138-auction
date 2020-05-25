@@ -78,9 +78,8 @@ pub async fn login_user(
     if let Ok(user_res) = res {
         if let Some(user_res) = user_res {
             if user.password() == user_res.password() {
-                if let None = id.identity() {
-                    id.remember(user_res.id.to_string());
-                }
+                id.forget();
+                id.remember(user_res.id.to_string());
                 return Ok(HttpResponse::Ok().json(user_res))
             }
         }
