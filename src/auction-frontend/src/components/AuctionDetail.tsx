@@ -37,7 +37,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
                     userId: userContext.userState.user.id,
                     auctionId: item.id,
                     amount: values.bid
-                }, {withCredentials: true});
+                });
                 await fetchItem();
                 showSuccess("Bid has been placed! You are now the highest bidder!")
             } catch (error) {

@@ -13,10 +13,7 @@ export const Nav = withRouter((props) => {
 
     const logout = async (): Promise<void> => {
         try {
-            const test = await axios.get('http://localhost:8080/api/logout',
-            {
-                withCredentials: true
-            });
+            const test = await axios.get('http://localhost:8080/api/logout');
             console.log(test)
             userContext.setUserState({
                 ...userContext.userState,
