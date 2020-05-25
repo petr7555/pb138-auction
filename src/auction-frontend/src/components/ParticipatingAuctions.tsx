@@ -9,7 +9,7 @@ import { useSortedAuctions } from "../hooks/useSortedAuctions";
 export const ParticipatingAuctions = observer(() => {
     const userContext = useContext(UserContext);
 
-    const [{data, isLoading, isError}, doFetch] = useSortedAuctions(
+    const [{data, isLoading}, ] = useSortedAuctions(
         `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,
         [],
     );

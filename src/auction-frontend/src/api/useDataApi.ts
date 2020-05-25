@@ -1,6 +1,7 @@
 import { useEffect, useReducer } from "react";
 import axios from 'axios';
 
+// @ts-ignore
 const dataFetchReducer = (state, action) => {
     switch (action.type) {
         case 'FETCH_INIT':
@@ -27,7 +28,8 @@ const dataFetchReducer = (state, action) => {
     }
 };
 
-export const useDataApi = (url, initialData) => {
+// @ts-ignore
+export const useDataApi = (url: string, initialData) => {
     const [state, dispatch] = useReducer(dataFetchReducer, {
         isLoading: false,
         isError: false,
