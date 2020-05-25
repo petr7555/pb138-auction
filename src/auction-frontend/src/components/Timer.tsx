@@ -9,6 +9,7 @@ interface TimeLeft {
 
 interface Props {
     until: string;
+    setOpacity?: any;
 }
 
 const calculateTimeLeft = (until: string): TimeLeft => {
@@ -32,7 +33,7 @@ const calculateTimeLeft = (until: string): TimeLeft => {
     return timeLeft;
 };
 
-export const Timer = ({until}: Props) => {
+export const Timer = ({until, setOpacity}: Props) => {
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(until));
 
     useEffect(() => {
@@ -51,6 +52,11 @@ export const Timer = ({until}: Props) => {
         // @ts-ignore
         timerComponents.push(`${timeLeft[interval]} ${interval} `);
     });
+
+    if (timerComponents.length === 0){
+        setOpacity && setOpacity("50%");
+    }
+
     return (
         <p>{timerComponents.length ? <span>Ends in: {timerComponents}</span> : <span>The auction has ended</span>}</p>
     )

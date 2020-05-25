@@ -4,26 +4,13 @@ import AuctionItem from "../entitites/AuctionItem";
 import { Col, Row, Skeleton } from "antd";
 import { useDataApi } from "../api/useDataApi";
 import { UserContext } from "../App";
+import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
 export const Auctions = () => {
-    const [{data: auctions, isLoading, isError}, doFetch] = useDataApi(
+    const [{data: auctions, isLoading, isError}, doFetch] = useSortedAuctions(
         'http://localhost:8080/api/auctions',
         [],
     );
-
-    auctions.sort((a: AuctionItem, b: AuctionItem) =>
-        (a.until < b.until) ? 1 : -1
-    )
-
-    const userContext = useContext(UserContext);
-    const [{data: participatingAuctions}] = useDataApi(
-        `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,
-        [],
-    );
-
-    const isLoosing = (auction: AuctionItem) => {
-        return participatingAuctions.includes(auction) && auction.winningUser !== userContext.userState.user.name;
-    }
 
     return (
         isLoading ?
@@ -40,7 +27,7 @@ export const Auctions = () => {
                 {auctions.map((auction: AuctionItem) => {
                     return (
                         <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
-                            <Item item={auction} key={auction.id} loosing={isLoosing(auction)}/>
+                            <Item item={auction} key={auction.id} loosing={auction.loosing}/>
                         </Col>
                     )
                 })}

@@ -7,4 +7,5 @@ export default interface AuctionItem {
     until: string;
     actualPrice: number;
     winningUser: string;
+    loosing?: boolean;
 }
