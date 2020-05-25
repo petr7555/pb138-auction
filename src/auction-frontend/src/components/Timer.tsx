@@ -42,22 +42,27 @@ export const Timer = ({until, setOpacity}: Props) => {
         }, 1000);
     });
 
-    const timerComponents: string[] = [];
+    let timeLeftStr: string = "";
 
-    Object.keys(timeLeft).forEach(interval => {
-        // @ts-ignore
-        if (!timeLeft[interval]) {
-            return;
-        }
-        // @ts-ignore
-        timerComponents.push(`${timeLeft[interval]} ${interval} `);
-    });
+    if (timeLeft.days) {
+        timeLeftStr +=  timeLeft.days + " days";
+    } else if (timeLeft.hours > 1) {
+        timeLeftStr +=  timeLeft.hours + " hours";
+    } else if (timeLeft.hours) {
+        timeLeftStr +=  timeLeft.hours + " hours " + timeLeft.minutes + " minutes";
+    } else if (timeLeft.minutes > 10) {
+        timeLeftStr +=  timeLeft.minutes + " minutes";
+    }  else if (timeLeft.minutes) {
+        timeLeftStr +=  timeLeft.minutes + " minutes " + timeLeft.seconds + " seconds";
+    } else if (timeLeft.seconds) {
+        timeLeftStr +=  timeLeft.seconds + " seconds";
+    }
 
-    if (timerComponents.length === 0){
+    if (!timeLeftStr.length){
         setOpacity && setOpacity("50%");
     }
 
     return (
-        <p>{timerComponents.length ? <span>Ends in: {timerComponents}</span> : <span>The auction has ended</span>}</p>
+        <p>{timeLeftStr.length ? <span>Ends in: {timeLeftStr}</span> : <span>The auction has ended</span>}</p>
     )
 };
