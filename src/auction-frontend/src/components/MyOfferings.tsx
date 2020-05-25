@@ -6,11 +6,12 @@ import { Item } from "./Item";
 import { DrawerForm } from "./DrawerForm";
 import { UserContext } from "../App";
 import { useDataApi } from "../api/useDataApi";
+import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
 export const MyOfferings = observer(() => {
     const userContext = useContext(UserContext);
 
-    const [{data, isLoading, isError}, doFetch] = useDataApi(
+    const [{data, isLoading, isError}, doFetch] = useSortedAuctions(
         `http://localhost:8080/api/auctions/user/${userContext.userState.user.id}`,
         [],
     );
@@ -35,7 +36,7 @@ export const MyOfferings = observer(() => {
                             {data.map((auction: AuctionItem) => {
                                 return (
                                     <Col xs={24} sm={24} md={12} lg={12} xxl={12}>
-                                        <Item item={auction} key={auction.id}/>
+                                        <Item item={auction} key={auction.id} loosing={false}/>
                                     </Col>
                                 )
                             })}

@@ -2,7 +2,7 @@ use crate::models::{Auction, ReturnAuction, Bid, NewAuction, NewBid, NewUser, Us
 use diesel::prelude::*;
 
 const QUERY_ALL_AUCTIONS: &str = " \
-    SELECT auctions.id, auctions.name, auctions.description, users.name as user, auctions.until, COALESCE(bids.amount, 0) AS actual_price, users2.name AS winning_user \
+    SELECT DISTINCT auctions.id, auctions.name, auctions.description, users.name as user, auctions.until, COALESCE(bids.amount, 0) AS actual_price, users2.name AS winning_user \
     FROM \
         auctions \
         INNER JOIN users \
@@ -132,7 +132,7 @@ pub fn find_auctions_user_taken_part_in(
     searched_user_id: i64,
 ) -> Result<Vec<ReturnAuction>, diesel::result::Error> {
     
-    let auction_vec = diesel::sql_query(format!("{} WHERE bids.user_id={}", QUERY_ALL_AUCTIONS, searched_user_id))
+    let auction_vec = diesel::sql_query(format!("{} INNER JOIN bids bids2 ON auctions.id = bids2.auction_id WHERE bids2.user_id={}", QUERY_ALL_AUCTIONS, searched_user_id))
         .load::<ReturnAuction>(conn)?;
     
     Ok(auction_vec)

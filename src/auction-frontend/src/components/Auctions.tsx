@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Item } from "./Item";
 import AuctionItem from "../entitites/AuctionItem";
 import { Col, Row, Skeleton } from "antd";
 import { useDataApi } from "../api/useDataApi";
+import { UserContext } from "../App";
+import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
 export const Auctions = () => {
-    const [{data, isLoading, isError}, doFetch] = useDataApi(
+    const [{data: auctions, isLoading, isError}, doFetch] = useSortedAuctions(
         'http://localhost:8080/api/auctions',
         [],
     );
@@ -13,7 +15,7 @@ export const Auctions = () => {
     return (
         isLoading ?
             (<Row gutter={[16, 16]}>
-                {[1,2,3,4,5,6,7].map(() => {
+                {[1, 2, 3, 4, 5, 6, 7].map(() => {
                     return (
                         <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
                             <Skeleton/>
@@ -22,10 +24,10 @@ export const Auctions = () => {
                 })}
             </Row>) :
             (<Row gutter={[16, 16]}>
-                {data.map((auction: AuctionItem) => {
+                {auctions.map((auction: AuctionItem) => {
                     return (
                         <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
-                            <Item item={auction} key={auction.id}/>
+                            <Item item={auction} key={auction.id} loosing={auction.loosing}/>
                         </Col>
                     )
                 })}

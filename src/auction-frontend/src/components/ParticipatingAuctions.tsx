@@ -4,12 +4,12 @@ import AuctionItem from "../entitites/AuctionItem";
 import { Col, Divider, Row, Skeleton } from "antd";
 import { Item } from "./Item";
 import { UserContext } from "../App";
-import { useDataApi } from "../api/useDataApi";
+import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
 export const ParticipatingAuctions = observer(() => {
     const userContext = useContext(UserContext);
 
-    const [{data, isLoading, isError}, doFetch] = useDataApi(
+    const [{data, isLoading, isError}, doFetch] = useSortedAuctions(
         `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,
         [],
     );
@@ -19,7 +19,7 @@ export const ParticipatingAuctions = observer(() => {
             <Divider><h2>Participating in</h2></Divider>
             {isLoading ? (
                 <Row gutter={[16, 16]}>
-                    {[1,2,3].map(() => {
+                    {[1, 2, 3].map(() => {
                         return (
                             <Col xs={24}>
                                 <Skeleton/>
@@ -33,7 +33,7 @@ export const ParticipatingAuctions = observer(() => {
                             {data.map((auction: AuctionItem) => {
                                 return (
                                     <Col xs={24}>
-                                        <Item item={auction} key={auction.id}/>
+                                        <Item item={auction} key={auction.id} loosing={auction.loosing}/>
                                     </Col>
                                 )
                             })}

@@ -34,6 +34,8 @@ export const Login = observer(() => {
                 user: res.data,
                 loggedIn: true
             });
+            console.log(res.data);
+
         } catch (error) {
             if (error.response) {
                 if (error.response.status === 401) {
@@ -58,9 +60,10 @@ export const Login = observer(() => {
         setVisible(false);
     };
 
-    const showModal = () => {
+    const showModal = (e: any) => {
+        e.preventDefault();
         setVisible(true);
-    }
+    };
 
     const closeModal = () => {
         setVisible(false);
@@ -83,7 +86,7 @@ export const Login = observer(() => {
                         Log in
                     </Button>
                 </Form.Item>
-                <p>Do not have an account? <button className="button-link" onClick={showModal}>Register</button></p>
+            <p>Do not have an account? <button className="button-link" onClick={showModal}>Register</button></p>
             </Form>
             <Modal
                 title="Register"

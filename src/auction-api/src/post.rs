@@ -59,7 +59,7 @@ pub async fn register_user(
         Response::DUPLICATE => 
             Ok(HttpResponse::Conflict().json(SuccessResponse { success: false })),
         Response::ERROR => 
-            Ok(HttpResponse::InternalServerError().finish()),
+            Err(HttpResponse::InternalServerError().finish().into()),
     }
 }
 
@@ -69,12 +69,8 @@ pub async fn login_user(
     form: web::Json<NewUser>,
     id: Identity,
 ) -> Result<HttpResponse, actix_web::Error> {
-    if let Some(_) = id.identity() {
-        return Ok(HttpResponse::Ok().finish())
-    }
 
     let conn = get_conn(pool)?;
-
 
     let user = form.into_inner();
     let user_moved = user.clone();
@@ -82,24 +78,38 @@ pub async fn login_user(
     if let Ok(user_res) = res {
         if let Some(user_res) = user_res {
             if user.password() == user_res.password() {
-                id.remember(user.name.clone());
-                println!("Remembering: {}", user.name);
+                if let None = id.identity() {
+                    id.remember(user_res.id.to_string());
+                }
                 return Ok(HttpResponse::Ok().json(user_res))
             }
         }
         return Ok(HttpResponse::Unauthorized().json(ErrorResponse::from("unknown user or invalid password".to_owned())))
     }
-    return Ok(HttpResponse::InternalServerError().finish())
+    return Err(HttpResponse::InternalServerError().finish().into())
+}
+
+fn identity_check(id: Identity, user_id: i64) -> Result<(), HttpResponse> {
+    if let None = id.identity() {
+        return Err(HttpResponse::Unauthorized().json(ErrorResponse::from("Authorization required".to_owned())))
+    }
+    if id.identity().unwrap() != user_id.to_string() {
+        return Err(HttpResponse::Unauthorized().json(ErrorResponse::from("Cannot make action for other user".to_owned())))
+    }
+    Ok(())
 }
 
 #[post("/api/auctions")]
 pub async fn create_auction(
     pool: web::Data<DbPool>,
     form: web::Json<NewAuction>,
+    id: Identity,
 ) -> Result<HttpResponse, actix_web::Error> {
-    let conn = get_conn(pool)?;
-
     let auction = form.into_inner();
+
+    identity_check(id, auction.user_id)?;
+
+    let conn = get_conn(pool)?;
 
     let res = web::block(move || actions::insert_new_auction(&conn, &auction)).await;
 
@@ -117,10 +127,14 @@ pub async fn create_auction(
 pub async fn create_bid(
     pool: web::Data<DbPool>,
     form: web::Json<NewBid>,
+    id: Identity,
 ) -> Result<HttpResponse, actix_web::Error> {
+    let bid = form.into_inner();
+
+    identity_check(id, bid.user_id)?;
+
     let conn = get_conn(pool)?;
 
-    let bid = form.into_inner();
     let user = bid.user_id;
     let amount = bid.amount;
 

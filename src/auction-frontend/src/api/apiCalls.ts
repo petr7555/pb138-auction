@@ -17,20 +17,9 @@ export const showSuccess = (msg: string) => {
 
 export const createAuction = async (auction: NewAuction) => {
     try {
-        const response = await axios.post("http://localhost:8080/api/auctions", auction);
+        const response = await axios.post("http://localhost:8080/api/auctions", auction,{withCredentials: true});
         showSuccess('Auction has been created');
     } catch (error) {
         showError(error);
-    }
-}
-
-export const createInitialAuctions = () => {
-    for (let i = 1; i < 6; ++i) {
-        createAuction({
-            userId: 1,
-            name: `auction name ${i}`,
-            description: `auction description ${i}`,
-            until: new Date("2020/05/" + (20 + i)).toISOString()
-        })
     }
 }

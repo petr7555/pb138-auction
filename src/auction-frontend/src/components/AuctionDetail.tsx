@@ -20,15 +20,6 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
         const fetchItem = async () => {
             try {
                 const res = await axios(`http://localhost:8080/api/auctions/${match.params.id}`);
-                // const result = {
-                //     id: 1,
-                //     name: "Brand new fridge",
-                //     description: "Too big for my flat.",
-                //     user: "Anne",
-                //     until: "2020/05/20",
-                //     actualPrice: 100,
-                //     winningUser: "John"
-                // };
                 setItem(res.data);
             } catch (error) {
                 showError(error);
@@ -44,9 +35,9 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
             try {
                 const response = await axios.post("http://localhost:8080/api/bids", {
                     userId: userContext.userState.user.id,
-                    auctionId: item?.id,
+                    auctionId: item.id,
                     amount: values.bid
-                });
+                }, {withCredentials: true});
                 await fetchItem();
                 showSuccess("Bid has been placed! You are now the highest bidder!")
             } catch (error) {
@@ -72,7 +63,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
                                onFinish={onFinish}>
                             <Form.Item
                                 name={"bid"}>
-                                <InputNumber
+                                <InputNumber style={{width: "200px"}}
                                     min={item.actualPrice + 1}
                                     formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 />
