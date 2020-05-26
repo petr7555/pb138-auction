@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true;
 export const UserContext = React.createContext(null);
 
 export const App = observer(() => {
-    const [userState, setUserState] = useState({loggedIn: false});
+    const [userState, setUserState] = useState(JSON.parse(sessionStorage.getItem("userState")) || {loggedIn: false});
 
     return (
         <UserContext.Provider value={{userState, setUserState}}>

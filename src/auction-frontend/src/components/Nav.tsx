@@ -18,6 +18,7 @@ export const Nav = withRouter((props) => {
                 ...userContext.userState,
                 loggedIn: false
             })
+            sessionStorage.removeItem("userState");
         } catch (error) {
             showError(error);
         }
