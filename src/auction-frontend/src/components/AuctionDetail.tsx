@@ -28,7 +28,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
 
         useEffect(() => {
             fetchItem();
-        }, [])
+        })
 
 
         const onFinish = async (values: Store) => {

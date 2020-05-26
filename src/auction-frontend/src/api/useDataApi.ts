@@ -48,7 +48,7 @@ export const useDataApi = (url: string, initialData) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    });
 
     return [state, fetchData];
 };

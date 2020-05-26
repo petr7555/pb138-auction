@@ -49,7 +49,7 @@ export const Login = observer(() => {
 
     const onFinishRegister = async (values: Store) => {
         try {
-            const res = await axios.post('http://localhost:8080/api/register', {
+            await axios.post('http://localhost:8080/api/register', {
                 name: values.username,
                 password: values.password
             });
