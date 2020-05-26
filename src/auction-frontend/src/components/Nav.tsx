@@ -13,7 +13,7 @@ export const Nav = withRouter((props) => {
 
     const logout = async (): Promise<void> => {
         try {
-            const res = await axios.get('http://localhost:8080/api/logout');
+            await axios.get('http://localhost:8080/api/logout');
             userContext.setUserState({
                 ...userContext.userState,
                 loggedIn: false
@@ -26,6 +26,7 @@ export const Nav = withRouter((props) => {
 
     return (
         <div>
+            {/* eslint-disable-next-line no-restricted-globals */} {/*WIP*/}
             <Menu selectedKeys={[location.pathname === "/" ? "/auctions" : location.pathname]} mode="horizontal"
                   className="main-menu">
                 <Menu.Item key="/auctions">

@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Item } from "./Item";
 import AuctionItem from "../entitites/AuctionItem";
 import { Col, Row, Skeleton } from "antd";
-import { useDataApi } from "../api/useDataApi";
-import { UserContext } from "../App";
 import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
 export const Auctions = () => {
-    const [{data: auctions, isLoading, isError}, doFetch] = useSortedAuctions(
+    const [{data: auctions, isLoading}, ] = useSortedAuctions(
         'http://localhost:8080/api/auctions',
         [],
     );

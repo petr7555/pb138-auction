@@ -24,7 +24,7 @@ export const Item = (props: ItemProps) => {
     <WarningTwoTone twoToneColor="red" title={"Someone has placed higher bid"}/>} {item.name}</span>
     return (
         <Link to={`/auctions/${item.id}`}>
-            <Card key={item.id} title={title} extra={<a href="#">More</a>} hoverable headStyle={{opacity}} bodyStyle={{opacity}}>
+            <Card key={item.id} title={title} extra={<button className="button-link">More</button>} hoverable headStyle={{opacity}} bodyStyle={{opacity}}>
                 <Bold title={"Description"} value={item.description}/>
                 <Bold title="Price" value={`$${item.actualPrice}`}/>
                 <Bold title={"Winner"} value={item.winningUser}/>
