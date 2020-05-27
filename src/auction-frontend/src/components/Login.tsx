@@ -6,6 +6,7 @@ import { FormFragment } from "./FormFragment";
 import { showError } from "../api/apiCalls";
 import axios from 'axios';
 import { userContextMain } from "../App";
+import { UserState } from "../types";
 
 const {Title} = Typography;
 
@@ -21,7 +22,7 @@ export const Login = observer(() => {
     const userContext = useContext(userContextMain);
 
     const [visible, setVisible] = useState<boolean>();
-    const [error, setError] = useState(false);
+    const [error, setError] = useState<boolean>(false);
     const [form] = Form.useForm();
 
     const onFinishLogin = async (values: Store) => {
@@ -30,7 +31,7 @@ export const Login = observer(() => {
                 name: values.username,
                 password: values.password,
             });
-            const userState = {
+            const userState: UserState = {
                 user: res.data,
                 loggedIn: true
             };
