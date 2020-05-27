@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Main } from "./components/Main";
 import axios from 'axios';
 import "./styles.less";
-import { UserState, UserContext } from './types';
+import { UserState, UserContext } from './types/types';
 
 axios.defaults.withCredentials = true;
 export const userContextMain = React.createContext<UserContext>(null);

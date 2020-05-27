@@ -2,7 +2,7 @@ import AuctionItem from "../entitites/AuctionItem";
 import { useDataApi } from "../api/useDataApi";
 import { useContext } from "react";
 import { userContextMain } from "../App";
-import { DataState } from "../types";
+import { DataState } from "../types/types";
 
 export const useSortedAuctions = (url: string, initialData: AuctionItem[]): [DataState, () => Promise<void>] => {
     const [{data, isLoading, isError}, doFetch] = useDataApi(

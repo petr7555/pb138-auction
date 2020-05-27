@@ -6,7 +6,7 @@ import { FormFragment } from "./FormFragment";
 import { showError } from "../api/apiCalls";
 import axios from 'axios';
 import { userContextMain } from "../App";
-import { UserState } from "../types";
+import { UserState } from "../types/types";
 
 const {Title} = Typography;
 

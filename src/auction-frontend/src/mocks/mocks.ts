@@ -1,4 +1,6 @@
-export const getMockAuctions = () => {
+import AuctionItem from "../entitites/AuctionItem"
+
+export const getMockAuctions = (): AuctionItem[] => {
     return [
         {
             id: 1,

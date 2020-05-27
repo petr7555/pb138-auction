@@ -1,6 +1,6 @@
-import { User } from "./entitites/User"
+import { User } from "../entitites/User"
 import { DataActionType } from "./enums"
-import AuctionItem from "./entitites/AuctionItem"
+import AuctionItem from "../entitites/AuctionItem"
 
 export type UserContext = {
     userState: UserState;

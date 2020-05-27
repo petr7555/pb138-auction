@@ -12,12 +12,12 @@ interface MatchParams {
     id: string;
 }
 
-export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
+export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.Element => {
         const userContext = useContext(userContextMain);
 
         const [item, setItem] = useState<AuctionItem | undefined>(undefined);
 
-        const fetchItem = async () => {
+        const fetchItem = async (): Promise<void> => {
             try {
                 const res = await axios(`http://localhost:8080/api/auctions/${match.params.id}`);
                 setItem(res.data);
@@ -32,7 +32,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
         }, [])
 
 
-        const onFinish = async (values: Store) => {
+        const onFinish = async (values: Store): Promise<void> => {
             try {
                 await axios.post("http://localhost:8080/api/bids", {
                     userId: userContext.userState.user.id,
@@ -66,7 +66,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>) => {
                                 name={"bid"}>
                                 <InputNumber style={{width: "200px"}}
                                     min={item.actualPrice + 1}
-                                    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    formatter={(value): string => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 />
                             </Form.Item>
                             <Form.Item>

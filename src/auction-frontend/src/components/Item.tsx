@@ -11,11 +11,11 @@ interface ItemProps {
     loosing: boolean;
 }
 
-const Bold = ({title, value}: { title: string; value: string }) => {
+const Bold = ({title, value}: { title: string; value: string }): JSX.Element => {
     return <p><span style={{fontWeight: "bold"}}>{title}: </span>{value}</p>
 }
 
-export const Item = (props: ItemProps) => {
+export const Item = (props: ItemProps): JSX.Element => {
     const {item} = props;
 
     const [opacity, setOpacity] = useState("100%");

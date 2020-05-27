@@ -2,7 +2,7 @@ import { Form, Input } from "antd";
 import React from "react";
 
 
-export const FormFragment = () => {
+export const FormFragment = (): JSX.Element => {
     return (
         <>
             <Form.Item

@@ -4,7 +4,7 @@ import AuctionItem from "../entitites/AuctionItem";
 import { Col, Row, Skeleton } from "antd";
 import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
-export const Auctions = () => {
+export const Auctions = (): JSX.Element => {
     const [{data: auctions, isLoading}, ] = useSortedAuctions(
         'http://localhost:8080/api/auctions',
         [],

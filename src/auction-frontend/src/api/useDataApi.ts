@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from "react";
 import axios from 'axios';
-import { DataState, DataAction } from "../types";
-import { DataActionType } from "../enums";
+import { DataState, DataAction } from "../types/types";
+import { DataActionType } from "../types/enums";
 import AuctionItem from "../entitites/AuctionItem";
 
 const dataFetchReducer = (state: DataState, action: DataAction): DataState => {

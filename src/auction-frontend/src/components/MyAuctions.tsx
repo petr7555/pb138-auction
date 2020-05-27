@@ -3,7 +3,7 @@ import { Col, Divider, Row } from "antd";
 import { ParticipatingAuctions } from "./ParticipatingAuctions";
 import { MyOfferings } from "./MyOfferings";
 
-export const MyAuctions = () => {
+export const MyAuctions = (): JSX.Element => {
     return (
         <Row>
             <Col xs={24} sm={12} md={8} lg={8} xxl={8}>
