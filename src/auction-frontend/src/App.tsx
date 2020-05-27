@@ -6,17 +6,17 @@ import axios from 'axios';
 import "./styles.less";
 
 axios.defaults.withCredentials = true;
-export const UserContext = React.createContext(null);
+export const userContextMain = React.createContext(null);
 
 export const App = observer(() => {
     const [userState, setUserState] = useState(JSON.parse(sessionStorage.getItem("userState")) || {loggedIn: false});
 
     return (
-        <UserContext.Provider value={{userState, setUserState}}>
+        <userContextMain.Provider value={{userState, setUserState}}>
             <div className="App">
                 {userState.loggedIn ? <Main/> : <Login/>}
             </div>
-        </UserContext.Provider>
+        </userContextMain.Provider>
     );
 })
 

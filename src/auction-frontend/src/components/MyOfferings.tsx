@@ -4,11 +4,11 @@ import AuctionItem from "../entitites/AuctionItem";
 import { Col, Divider, Row, Skeleton } from "antd";
 import { Item } from "./Item";
 import { DrawerForm } from "./DrawerForm";
-import { UserContext } from "../App";
+import { userContextMain } from "../App";
 import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
 export const MyOfferings = observer(() => {
-    const userContext = useContext(UserContext);
+    const userContext = useContext(userContextMain);
 
     const [{data, isLoading}, doFetch] = useSortedAuctions(
         `http://localhost:8080/api/auctions/user/${userContext.userState.user.id}`,

@@ -5,7 +5,7 @@ import { Store } from "antd/lib/form/interface";
 import { FormFragment } from "./FormFragment";
 import { showError } from "../api/apiCalls";
 import axios from 'axios';
-import { UserContext } from "../App";
+import { userContextMain } from "../App";
 
 const {Title} = Typography;
 
@@ -18,7 +18,7 @@ const tailLayout = {
 };
 
 export const Login = observer(() => {
-    const userContext = useContext(UserContext);
+    const userContext = useContext(userContextMain);
 
     const [visible, setVisible] = useState<boolean>();
     const [error, setError] = useState(false);

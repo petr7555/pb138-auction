@@ -2,14 +2,14 @@ import React, { useContext } from "react";
 import { Button, Menu } from "antd";
 import { HourglassOutlined, IdcardOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
-import { UserContext } from "../App";
+import { userContextMain } from "../App";
 import axios from 'axios';
 import { showError } from "../api/apiCalls";
 
 export const Nav = withRouter((props) => {
     const {location} = props;
 
-    const userContext = useContext(UserContext);
+    const userContext = useContext(userContextMain);
 
     const logout = async (): Promise<void> => {
         try {

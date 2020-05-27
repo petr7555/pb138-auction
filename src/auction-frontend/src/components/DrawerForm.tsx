@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import { Button, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createAuction } from "../api/apiCalls";
-import { UserContext } from "../App";
+import { userContextMain } from "../App";
 import moment from "moment";
 
 // @ts-ignore
@@ -18,7 +18,7 @@ export const DrawerForm = ({refresh}) => {
         setVisible(false);
     };
 
-    const userContext = useContext(UserContext);
+    const userContext = useContext(userContextMain);
 
     // @ts-ignore
     const onFinish = (values) => {

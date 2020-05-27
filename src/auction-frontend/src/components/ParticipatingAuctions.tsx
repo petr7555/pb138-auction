@@ -3,11 +3,11 @@ import React, { useContext } from "react";
 import AuctionItem from "../entitites/AuctionItem";
 import { Col, Divider, Row, Skeleton } from "antd";
 import { Item } from "./Item";
-import { UserContext } from "../App";
+import { userContextMain } from "../App";
 import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
 export const ParticipatingAuctions = observer(() => {
-    const userContext = useContext(UserContext);
+    const userContext = useContext(userContextMain);
 
     const [{data, isLoading}, ] = useSortedAuctions(
         `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,
