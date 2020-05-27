@@ -1,4 +1,6 @@
 import { User } from "./entitites/User"
+import { DataActionType } from "./enums"
+import AuctionItem from "./entitites/AuctionItem"
 
 export type UserContext = {
     userState: UserState;
@@ -10,8 +12,13 @@ export type UserState = {
     user: User;
 }
 
-export type SiteState = {
+export type DataState = {
     isLoading: boolean;
     isError: boolean;
-    data: any;
+    data: AuctionItem[];
+}
+
+export type DataAction = {
+    type: DataActionType;
+    payload?: AuctionItem[];
 }

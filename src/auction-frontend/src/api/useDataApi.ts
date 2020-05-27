@@ -1,23 +1,25 @@
 import { useEffect, useReducer } from "react";
 import axios from 'axios';
+import { DataState, DataAction } from "../types";
+import { DataActionType } from "../enums";
+import AuctionItem from "../entitites/AuctionItem";
 
-// @ts-ignore
-const dataFetchReducer = (state, action) => {
+const dataFetchReducer = (state: DataState, action: DataAction): DataState => {
     switch (action.type) {
-        case 'FETCH_INIT':
+        case DataActionType.FETCH_INIT:
             return {
                 ...state,
                 isLoading: true,
                 isError: false
             };
-        case 'FETCH_SUCCESS':
+        case DataActionType.FETCH_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isError: false,
                 data: action.payload,
             };
-        case 'FETCH_FAILURE':
+        case DataActionType.FETCH_FAILURE:
             return {
                 ...state,
                 isLoading: false,
@@ -28,21 +30,20 @@ const dataFetchReducer = (state, action) => {
     }
 };
 
-// @ts-ignore
-export const useDataApi = (url: string, initialData) => {
-    const [state, dispatch] = useReducer(dataFetchReducer, {
+export const useDataApi = (url: string, initialData: AuctionItem[]): [DataState, () => Promise<void>] => {
+    const [state, dispatch] = useReducer<(state: DataState, action: DataAction) => DataState>(dataFetchReducer, {
         isLoading: false,
         isError: false,
         data: initialData,
     });
 
-    const fetchData = async () => {
-        dispatch({type: 'FETCH_INIT'});
+    const fetchData = async (): Promise<void> => {
+        dispatch({type: DataActionType.FETCH_INIT});
         try {
             const result = await axios(url);
-            dispatch({type: 'FETCH_SUCCESS', payload: result.data});
+            dispatch({type: DataActionType.FETCH_SUCCESS, payload: result.data});
         } catch (error) {
-            dispatch({type: 'FETCH_FAILURE'});
+            dispatch({type: DataActionType.FETCH_FAILURE});
         }
     };
 
