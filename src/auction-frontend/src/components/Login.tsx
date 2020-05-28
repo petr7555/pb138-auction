@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { observer } from "mobx-react-lite";
 import { Alert, Button, Form, Modal, Typography } from 'antd';
 import { Store } from "antd/lib/form/interface";
 import { FormFragment } from "./FormFragment";
@@ -18,7 +17,7 @@ const tailLayout = {
     wrapperCol: {flex: "auto"},
 };
 
-export const Login = observer(() => {
+export const Login = () => {
     const userContext = useContext(userContextMain);
 
     const [visible, setVisible] = useState<boolean>();
@@ -104,4 +103,4 @@ export const Login = observer(() => {
             </Modal>
         </div>
     );
-})
+};

@@ -1,4 +1,3 @@
-import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import AuctionItem from "../entitites/AuctionItem";
 import { Col, Divider, Row, Skeleton } from "antd";
@@ -7,7 +6,7 @@ import { DrawerForm } from "./DrawerForm";
 import { userContextMain } from "../App";
 import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
-export const MyOfferings = observer(() => {
+export const MyOfferings = () => {
     const userContext = useContext(userContextMain);
 
     const [{data, isLoading}, doFetch] = useSortedAuctions(
@@ -44,4 +43,4 @@ export const MyOfferings = observer(() => {
                 </>)}
         </div>
     )
-});
+};
