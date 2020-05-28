@@ -18,7 +18,7 @@ const Bold = ({title, value}: { title: string; value: string }): JSX.Element => 
 export const Item = (props: ItemProps): JSX.Element => {
     const {item} = props;
 
-    const [opacity, setOpacity] = useState("100%");
+    const [opacity, setOpacity] = useState<string>("100%");
 
     const title = <span>{props.loosing &&
     <WarningTwoTone twoToneColor="red" title={"Someone has placed higher bid"}/>} {item.name}</span>

@@ -5,11 +5,12 @@ import { Link, withRouter } from 'react-router-dom';
 import { userContextMain } from "../App";
 import axios from 'axios';
 import { showError } from "../api/apiCalls";
+import { UserContext } from "../types/types";
 
 export const Nav = withRouter((props) => {
     const {location} = props;
 
-    const userContext = useContext(userContextMain);
+    const userContext = useContext<UserContext>(userContextMain);
 
     const logout = async (): Promise<void> => {
         try {
@@ -26,7 +27,6 @@ export const Nav = withRouter((props) => {
 
     return (
         <div>
-            {/* eslint-disable-next-line no-restricted-globals */} {/*WIP*/}
             <Menu selectedKeys={[location.pathname === "/" ? "/auctions" : location.pathname]} mode="horizontal"
                   className="main-menu">
                 <Menu.Item key="/auctions">

@@ -7,13 +7,14 @@ import { Store } from "antd/lib/form/interface";
 import axios from 'axios';
 import { showError, showSuccess } from "../api/apiCalls";
 import { userContextMain } from "../App";
+import { UserContext } from "../types/types";
 
 interface MatchParams {
     id: string;
 }
 
 export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.Element => {
-        const userContext = useContext(userContextMain);
+        const userContext = useContext<UserContext>(userContextMain);
 
         const [item, setItem] = useState<AuctionItem | undefined>(undefined);
 

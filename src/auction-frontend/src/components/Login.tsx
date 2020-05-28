@@ -5,7 +5,7 @@ import { FormFragment } from "./FormFragment";
 import { showError } from "../api/apiCalls";
 import axios from 'axios';
 import { userContextMain } from "../App";
-import { UserState } from "../types/types";
+import { UserState, UserContext } from "../types/types";
 
 const {Title} = Typography;
 
@@ -18,7 +18,7 @@ const tailLayout = {
 };
 
 export const Login = () => {
-    const userContext = useContext(userContextMain);
+    const userContext = useContext<UserContext>(userContextMain);
 
     const [visible, setVisible] = useState<boolean>();
     const [error, setError] = useState<boolean>(false);

@@ -8,7 +8,7 @@ import { UserState, UserContext } from './types/types';
 axios.defaults.withCredentials = true;
 export const userContextMain = React.createContext<UserContext>(null);
 
-export const App = () => {
+export const App = (): JSX.Element => {
     const [userState, setUserState] = useState<UserState>(JSON.parse(sessionStorage.getItem("userState")) || {loggedIn: false});
 
     return (

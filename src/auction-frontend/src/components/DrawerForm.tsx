@@ -5,10 +5,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import { createAuction } from "../api/apiCalls";
 import { userContextMain } from "../App";
 import moment from "moment";
+import { UserContext } from '../types/types';
 
 // @ts-ignore
 export const DrawerForm = ({refresh}) => {
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState<boolean>(false);
 
     const showDrawer = () => {
         setVisible(true);
@@ -18,7 +19,7 @@ export const DrawerForm = ({refresh}) => {
         setVisible(false);
     };
 
-    const userContext = useContext(userContextMain);
+    const userContext = useContext<UserContext>(userContextMain);
 
     // @ts-ignore
     const onFinish = (values) => {
