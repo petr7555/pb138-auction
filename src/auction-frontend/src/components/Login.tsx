@@ -17,14 +17,14 @@ const tailLayout = {
     wrapperCol: {flex: "auto"},
 };
 
-export const Login = () => {
+export const Login = (): JSX.Element => {
     const userContext = useContext<UserContext>(userContextMain);
 
     const [visible, setVisible] = useState<boolean>();
     const [error, setError] = useState<boolean>(false);
     const [form] = Form.useForm();
 
-    const onFinishLogin = async (values: Store) => {
+    const onFinishLogin = async (values: Store): Promise<void> => {
         try {
             const res = await axios.post('http://localhost:8080/api/login', {
                 name: values.username,
@@ -47,7 +47,7 @@ export const Login = () => {
         }
     };
 
-    const onFinishRegister = async (values: Store) => {
+    const onFinishRegister = async (values: Store): Promise<void> => {
         try {
             await axios.post('http://localhost:8080/api/register', {
                 name: values.username,
@@ -60,12 +60,12 @@ export const Login = () => {
         setVisible(false);
     };
 
-    const showModal = (e: any) => {
+    const showModal = (e: React.FormEvent): void=> {
         e.preventDefault();
         setVisible(true);
     };
 
-    const closeModal = () => {
+    const closeModal = (): void => {
         setVisible(false);
     }
 
