@@ -5,24 +5,23 @@ import { PlusOutlined } from '@ant-design/icons';
 import { createAuction } from "../api/apiCalls";
 import { userContextMain } from "../App";
 import moment from "moment";
-import { UserContext } from '../types/types';
+import { UserContext, DrawerFormParam, DrawerFormDateValidator } from '../types/types';
+import { Store } from 'antd/lib/form/interface';
 
-// @ts-ignore
-export const DrawerForm = ({refresh}) => {
+export const DrawerForm = ({refresh}: DrawerFormParam): JSX.Element => {
     const [visible, setVisible] = useState<boolean>(false);
 
-    const showDrawer = () => {
+    const showDrawer = (): void => {
         setVisible(true);
     };
 
-    const onClose = () => {
+    const onClose = (): void => {
         setVisible(false);
     };
 
     const userContext = useContext<UserContext>(userContextMain);
 
-    // @ts-ignore
-    const onFinish = (values) => {
+    const onFinish = (values: Store): void => {
         createAuction({
             userId: userContext.userState.user.id,
             name: values.name,
@@ -35,8 +34,7 @@ export const DrawerForm = ({refresh}) => {
 
     const [form] = Form.useForm();
 
-    // @ts-ignore
-    function disabledDate(current) {
+    function disabledDate(current: moment.Moment): boolean {
         // Can not select days before today
         return current && current < moment().startOf('day');
     }
@@ -80,8 +78,8 @@ export const DrawerForm = ({refresh}) => {
                                 name="until"
                                 label="Ends at"
                                 rules={[{required: true, message: 'Please choose the end of the auction'},
-                                    () => ({
-                                        validator(rule, value) {
+                                    (): DrawerFormDateValidator => ({
+                                        validator(rule, value): Promise<void> {
                                             if (!value || value >= moment().add(1, 'minute')) {
                                                 return Promise.resolve();
                                             }

@@ -1,6 +1,8 @@
 import { User } from "../entitites/User"
 import { DataActionType } from "./enums"
 import AuctionItem from "../entitites/AuctionItem"
+import moment from "moment"
+import { Rule } from "antd/lib/form"
 
 export type UserContext = {
     userState: UserState;
@@ -21,4 +23,12 @@ export type DataState = {
 export type DataAction = {
     type: DataActionType;
     payload?: AuctionItem[];
+}
+
+export type DrawerFormParam = {
+    refresh: () => Promise<void>;
+}
+
+export type DrawerFormDateValidator = {
+    validator: (rule: Rule, value: moment.Moment) => Promise<void>;
 }
