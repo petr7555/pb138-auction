@@ -11,7 +11,8 @@ export const Auctions = (): JSX.Element => {
     );
 
     return (
-        isLoading ?
+        <div className="auctions">
+            {isLoading ?
             (<Row gutter={[16, 16]}>
                 {[1, 2, 3, 4, 5, 6, 7].map(() => {
                     return (
@@ -29,6 +30,7 @@ export const Auctions = (): JSX.Element => {
                         </Col>
                     )
                 })}
-            </Row>)
+            </Row>)}
+        </div>
     )
 };
