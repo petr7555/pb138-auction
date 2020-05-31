@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { RouteComponentProps } from 'react-router';
-import { Button, Descriptions, Form, InputNumber, Skeleton } from "antd";
+import { Button, Descriptions, Form, InputNumber, Skeleton, Divider } from "antd";
 import AuctionItem from "../entitites/AuctionItem";
 import { Timer } from "./Timer";
 import { Store } from "antd/lib/form/interface";
@@ -61,21 +61,25 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
                         <Descriptions.Item label="Price">${item.actualPrice}</Descriptions.Item>
                     </Descriptions>
                     {active && (item.user !== userContext.userState.user.name ?
-                        (<Form initialValues={{bid: item.actualPrice + 1}}
-                               onFinish={onFinish}>
-                            <Form.Item
-                                name={"bid"}>
-                                <InputNumber style={{width: "200px"}}
-                                    min={item.actualPrice + 1}
-                                    formatter={(value): string => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                />
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Place bid
-                                </Button>
-                            </Form.Item>
-                        </Form>) : <p>You can't bid on your own auction</p>)}
+                        (<div>
+                            <Divider type="horizontal" style={{width: "100%"}}/>
+                            <Form
+                                initialValues={{bid: item.actualPrice + 1}}
+                                onFinish={onFinish}>
+                                <Form.Item
+                                    name={"bid"}>
+                                    <InputNumber style={{width: "200px"}}
+                                        min={item.actualPrice + 1}
+                                        formatter={(value): string => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="submit">
+                                        Place bid
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </div>) : <p>You can't bid on your own auction</p>)}
                 </div>
                 : <Skeleton/>
         )
