@@ -1,15 +1,15 @@
-import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import AuctionItem from "../entitites/AuctionItem";
 import { Col, Divider, Row, Skeleton } from "antd";
 import { Item } from "./Item";
-import { UserContext } from "../App";
+import { userContextMain } from "../App";
 import { useSortedAuctions } from "../hooks/useSortedAuctions";
+import { UserContext } from "../types/types";
 
-export const ParticipatingAuctions = observer(() => {
-    const userContext = useContext(UserContext);
+export const ParticipatingAuctions = (): JSX.Element => {
+    const userContext = useContext<UserContext>(userContextMain);
 
-    const [{data, isLoading, isError}, doFetch] = useSortedAuctions(
+    const [{data, isLoading}, ] = useSortedAuctions(
         `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,
         [],
     );
@@ -43,4 +43,4 @@ export const ParticipatingAuctions = observer(() => {
             )}
         </div>
     )
-});
+};

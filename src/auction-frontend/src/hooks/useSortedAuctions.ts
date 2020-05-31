@@ -1,9 +1,10 @@
 import AuctionItem from "../entitites/AuctionItem";
 import { useDataApi } from "../api/useDataApi";
 import { useContext } from "react";
-import { UserContext } from "../App";
+import { userContextMain } from "../App";
+import { DataState, UserContext } from "../types/types";
 
-export const useSortedAuctions = (url: string, initialData: AuctionItem[]) => {
+export const useSortedAuctions = (url: string, initialData: AuctionItem[]): [DataState, () => Promise<void>] => {
     const [{data, isLoading, isError}, doFetch] = useDataApi(
         url,
         initialData,
@@ -14,7 +15,7 @@ export const useSortedAuctions = (url: string, initialData: AuctionItem[]) => {
     )
 
     // Adds to each AuctionItem loosing flag
-    const userContext = useContext(UserContext);
+    const userContext = useContext<UserContext>(userContextMain);
 
     const [{data: participatingAuctions}] = useDataApi(
         `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,

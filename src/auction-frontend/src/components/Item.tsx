@@ -11,20 +11,20 @@ interface ItemProps {
     loosing: boolean;
 }
 
-const Bold = ({title, value}: { title: string; value: string }) => {
+const Bold = ({title, value}: { title: string; value: string }): JSX.Element => {
     return <p><span style={{fontWeight: "bold"}}>{title}: </span>{value}</p>
 }
 
-export const Item = (props: ItemProps) => {
+export const Item = (props: ItemProps): JSX.Element => {
     const {item} = props;
 
-    const [opacity, setOpacity] = useState("100%");
+    const [opacity, setOpacity] = useState<string>("100%");
 
     const title = <span>{props.loosing &&
     <WarningTwoTone twoToneColor="red" title={"Someone has placed higher bid"}/>} {item.name}</span>
     return (
         <Link to={`/auctions/${item.id}`}>
-            <Card key={item.id} title={title} extra={<a href="#">More</a>} hoverable headStyle={{opacity}} bodyStyle={{opacity}}>
+            <Card key={item.id} title={title} extra={<button className="button-link">More</button>} hoverable headStyle={{opacity}} bodyStyle={{opacity}}>
                 <Bold title={"Description"} value={item.description}/>
                 <Bold title="Price" value={`$${item.actualPrice}`}/>
                 <Bold title={"Winner"} value={item.winningUser}/>

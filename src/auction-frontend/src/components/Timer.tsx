@@ -9,7 +9,7 @@ interface TimeLeft {
 
 interface Props {
     until: string;
-    setOpacity?: any;
+    setOpacity?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const calculateTimeLeft = (until: string): TimeLeft => {
@@ -33,8 +33,8 @@ const calculateTimeLeft = (until: string): TimeLeft => {
     return timeLeft;
 };
 
-export const Timer = ({until, setOpacity}: Props) => {
-    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(until));
+export const Timer = ({until, setOpacity}: Props): JSX.Element => {
+    const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft(until));
 
     useEffect(() => {
         setTimeout(() => {
@@ -42,7 +42,7 @@ export const Timer = ({until, setOpacity}: Props) => {
         }, 1000);
     });
 
-    let timeLeftStr: string = "";
+    let timeLeftStr = "";
 
     if (timeLeft.days) {
         timeLeftStr +=  timeLeft.days + " days";

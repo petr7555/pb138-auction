@@ -2,23 +2,24 @@ import React, { useContext } from "react";
 import { Button, Menu } from "antd";
 import { HourglassOutlined, IdcardOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
-import { UserContext } from "../App";
+import { userContextMain } from "../App";
 import axios from 'axios';
 import { showError } from "../api/apiCalls";
+import { UserContext } from "../types/types";
 
 export const Nav = withRouter((props) => {
     const {location} = props;
 
-    const userContext = useContext(UserContext);
+    const userContext = useContext<UserContext>(userContextMain);
 
     const logout = async (): Promise<void> => {
         try {
-            const test = await axios.get('http://localhost:8080/api/logout');
-            console.log(test)
+            await axios.get('http://localhost:8080/api/logout');
             userContext.setUserState({
                 ...userContext.userState,
                 loggedIn: false
             })
+            sessionStorage.removeItem("userState");
         } catch (error) {
             showError(error);
         }
@@ -26,7 +27,6 @@ export const Nav = withRouter((props) => {
 
     return (
         <div>
-            {/* eslint-disable-next-line no-restricted-globals */}
             <Menu selectedKeys={[location.pathname === "/" ? "/auctions" : location.pathname]} mode="horizontal"
                   className="main-menu">
                 <Menu.Item key="/auctions">

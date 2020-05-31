@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
-import { observer } from "mobx-react-lite";
 import { Alert, Button, Form, Modal, Typography } from 'antd';
 import { Store } from "antd/lib/form/interface";
 import { FormFragment } from "./FormFragment";
 import { showError } from "../api/apiCalls";
 import axios from 'axios';
-import { UserContext } from "../App";
+import { userContextMain } from "../App";
+import { UserState, UserContext } from "../types/types";
 
 const {Title} = Typography;
 
@@ -17,25 +17,25 @@ const tailLayout = {
     wrapperCol: {flex: "auto"},
 };
 
-export const Login = observer(() => {
-    const userContext = useContext(UserContext);
+export const Login = (): JSX.Element => {
+    const userContext = useContext<UserContext>(userContextMain);
 
     const [visible, setVisible] = useState<boolean>();
-    const [error, setError] = useState(false);
+    const [error, setError] = useState<boolean>(false);
     const [form] = Form.useForm();
 
-    const onFinishLogin = async (values: Store) => {
+    const onFinishLogin = async (values: Store): Promise<void> => {
         try {
             const res = await axios.post('http://localhost:8080/api/login', {
                 name: values.username,
                 password: values.password,
             });
-            userContext.setUserState({
+            const userState: UserState = {
                 user: res.data,
                 loggedIn: true
-            });
-            console.log(res.data);
-
+            };
+            userContext.setUserState(userState);
+            sessionStorage.setItem("userState", JSON.stringify(userState));
         } catch (error) {
             if (error.response) {
                 if (error.response.status === 401) {
@@ -47,9 +47,9 @@ export const Login = observer(() => {
         }
     };
 
-    const onFinishRegister = async (values: Store) => {
+    const onFinishRegister = async (values: Store): Promise<void> => {
         try {
-            const res = await axios.post('http://localhost:8080/api/register', {
+            await axios.post('http://localhost:8080/api/register', {
                 name: values.username,
                 password: values.password
             });
@@ -60,12 +60,12 @@ export const Login = observer(() => {
         setVisible(false);
     };
 
-    const showModal = (e: any) => {
+    const showModal = (e: React.FormEvent): void=> {
         e.preventDefault();
         setVisible(true);
     };
 
-    const closeModal = () => {
+    const closeModal = (): void => {
         setVisible(false);
     }
 
@@ -86,7 +86,7 @@ export const Login = observer(() => {
                         Log in
                     </Button>
                 </Form.Item>
-            <p>Do not have an account? <button className="button-link" onClick={showModal}>Register</button></p>
+                <p>Do not have an account? <button className="button-link" onClick={showModal}>Register</button></p>
             </Form>
             <Modal
                 title="Register"
@@ -103,4 +103,4 @@ export const Login = observer(() => {
             </Modal>
         </div>
     );
-})
+};
