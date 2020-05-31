@@ -1,5 +1,6 @@
 use crate::models::{Auction, ReturnAuction, Bid, NewAuction, NewBid, NewUser, User};
 use diesel::prelude::*;
+use diesel::sql_types::BigInt;
 
 const QUERY_ALL_AUCTIONS: &str = " \
     SELECT DISTINCT auctions.id, auctions.name, auctions.description, users.name as user, auctions.until, COALESCE(bids.amount, 0) AS actual_price, users2.name AS winning_user \
@@ -32,7 +33,8 @@ pub fn find_auction_by_id(
     auction_id: i64,
 ) -> Result<Option<ReturnAuction>, diesel::result::Error> {
 
-    let auction = diesel::sql_query(format!("{} WHERE auctions.id={} LIMIT 1", QUERY_ALL_AUCTIONS, auction_id))
+    let auction = diesel::sql_query(format!("{} WHERE auctions.id= $1 LIMIT 1", QUERY_ALL_AUCTIONS))
+        .bind::<BigInt, _>(auction_id)
         .get_result::<ReturnAuction>(conn)
         .optional()?;
 
@@ -98,7 +100,8 @@ pub fn find_auctions_by_user_id(
     user_id: i64,
 ) -> Result<Vec<ReturnAuction>, diesel::result::Error> {
 
-    let auction_vec = diesel::sql_query(format!("{} WHERE users.id={}", QUERY_ALL_AUCTIONS, user_id))
+    let auction_vec = diesel::sql_query(format!("{} WHERE users.id= $1", QUERY_ALL_AUCTIONS))
+        .bind::<BigInt, _>(user_id)
         .load::<ReturnAuction>(conn)?;
 
     Ok(auction_vec)
@@ -132,7 +135,8 @@ pub fn find_auctions_user_taken_part_in(
     searched_user_id: i64,
 ) -> Result<Vec<ReturnAuction>, diesel::result::Error> {
     
-    let auction_vec = diesel::sql_query(format!("{} INNER JOIN bids bids2 ON auctions.id = bids2.auction_id WHERE bids2.user_id={}", QUERY_ALL_AUCTIONS, searched_user_id))
+    let auction_vec = diesel::sql_query(format!("{} INNER JOIN bids bids2 ON auctions.id = bids2.auction_id WHERE bids2.user_id= $1", QUERY_ALL_AUCTIONS))
+        .bind::<BigInt, _>(searched_user_id)
         .load::<ReturnAuction>(conn)?;
     
     Ok(auction_vec)

@@ -13,6 +13,7 @@ pub struct User {
     pub id: i64,
     name: String,
     #[getset(get = "pub")]
+    #[serde(skip)]
     password: String,
     active: bool,
     created_at: NaiveDateTime,
