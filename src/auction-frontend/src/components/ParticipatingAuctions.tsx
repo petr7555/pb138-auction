@@ -28,7 +28,7 @@ export const ParticipatingAuctions = (): JSX.Element => {
                     })}
                 </Row>) : (
                 <>
-                    {data.length === 0 ? <p>You did not bid in any auction. Go ahead and bid in one!</p> :
+                    {data.length === 0 ? <p className="participating-auctions__no-auction-text">You did not bid in any auction. Go ahead and bid in one!</p> :
                         <Row gutter={[16, 16]}>
                             {data.map((auction: AuctionItem) => {
                                 return (
