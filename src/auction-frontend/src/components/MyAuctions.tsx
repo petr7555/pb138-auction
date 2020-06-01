@@ -11,7 +11,7 @@ export const MyAuctions = (): JSX.Element => {
                     <ParticipatingAuctions/>
                 </Col>
                 <Col className="my-auctions-divider">
-                    <Divider type="vertical" style={{height: "100%"}}/>
+                    <Divider className="my-auctions-divider__divider" type="vertical"/>
                 </Col>
                 <Col xs={23} sm={11} md={15} lg={15} xxl={15}>
                     <MyOfferings/>

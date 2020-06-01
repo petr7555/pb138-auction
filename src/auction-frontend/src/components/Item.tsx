@@ -12,7 +12,7 @@ interface ItemProps {
 }
 
 const Bold = ({title, value}: { title: string; value: string }): JSX.Element => {
-    return <p><span style={{fontWeight: "bold"}}>{title}: </span>{value}</p>
+    return <p><span className="item__bold">{title}: </span>{value}</p>
 }
 
 export const Item = (props: ItemProps): JSX.Element => {
@@ -25,9 +25,9 @@ export const Item = (props: ItemProps): JSX.Element => {
     return (
         <Link to={`/auctions/${item.id}`}>
             <Card key={item.id} title={title} extra={<button className="button-link">More</button>} hoverable headStyle={{opacity}} bodyStyle={{opacity}}>
-                <Bold title={"Description"} value={item.description}/>
+                <Bold title="Description" value={item.description}/>
                 <Bold title="Price" value={`$${item.actualPrice}`}/>
-                <Bold title={"Winner"} value={item.winningUser}/>
+                <Bold title="Winner" value={item.winningUser}/>
                 <Timer until={item.until} setOpacity={setOpacity}/>
             </Card>
         </Link>

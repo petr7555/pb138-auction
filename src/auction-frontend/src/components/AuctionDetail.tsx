@@ -62,13 +62,14 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
                     </Descriptions>
                     {active && (item.user !== userContext.userState.user.name ?
                         (<div>
-                            <Divider type="horizontal" style={{width: "100%"}}/>
+                            <Divider className="auction-deatil__divider" type="horizontal"/>
                             <Form
                                 initialValues={{bid: item.actualPrice + 1}}
                                 onFinish={onFinish}>
                                 <Form.Item
                                     name={"bid"}>
-                                    <InputNumber style={{width: "200px"}}
+                                    <InputNumber
+                                        className="auction-detail__number-input"
                                         min={item.actualPrice + 1}
                                         formatter={(value): string => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     />
