@@ -71,7 +71,7 @@ export const Login = (): JSX.Element => {
 
     return (
         <div>
-            <Title className="login-title">The BESTEST auction system</Title>
+            <Title className="login-title">The Auction Project | PB138 </Title>
             <Form
                 {...layout}
                 name="basic"
