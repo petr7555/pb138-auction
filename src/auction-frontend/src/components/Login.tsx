@@ -79,7 +79,7 @@ export const Login = (): JSX.Element => {
                 onFinish={onFinishLogin}
                 className="login-form"
             >
-                {error && <Alert className="login-alert" message="Wrong username or password" type="error"/>}
+                {error && <Alert className="login-form__alert" message="Wrong username or password" type="error"/>}
                 <FormFragment/>
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit" className="login-form__button" size="large">
