@@ -17,7 +17,7 @@ export const MyOfferings = (): JSX.Element => {
 
     return (
         <div>
-            <Divider><h2>My offerings</h2></Divider>
+            <Divider><h2>My offers</h2></Divider>
             <DrawerForm refresh={doFetch}/>
             {isLoading ? (
                 <Row gutter={[16, 16]}>
