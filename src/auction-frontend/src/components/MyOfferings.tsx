@@ -6,12 +6,13 @@ import { DrawerForm } from "./DrawerForm";
 import { userContextMain } from "../App";
 import { useSortedAuctions } from "../hooks/useSortedAuctions";
 import { UserContext } from "../types/types";
+import { host, port } from "../constants";
 
 export const MyOfferings = (): JSX.Element => {
     const userContext = useContext<UserContext>(userContextMain);
 
     const [{data, isLoading}, doFetch] = useSortedAuctions(
-        `http://localhost:8080/api/auctions/user/${userContext.userState.user.id}`,
+        `http://${host}:${port}/api/auctions/user/${userContext.userState.user.id}`,
         [],
     );
 

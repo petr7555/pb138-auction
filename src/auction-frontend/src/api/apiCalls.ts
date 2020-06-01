@@ -1,6 +1,7 @@
 import { notification } from "antd";
 import NewAuction from "../entitites/NewAuction";
 import axios from 'axios';
+import { host, port } from "../constants";
 
 export const showError = (error: Error): void => {
     notification.error({
@@ -17,7 +18,7 @@ export const showSuccess = (msg: string): void => {
 
 export const createAuction = async (auction: NewAuction): Promise<void> => {
     try {
-        await axios.post("http://localhost:8080/api/auctions", auction);
+        await axios.post(`http://${host}:${port}/api/auctions`, auction);
         showSuccess('Auction has been created');
     } catch (error) {
         showError(error);
