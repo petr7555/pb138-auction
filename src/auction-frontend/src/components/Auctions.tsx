@@ -16,7 +16,7 @@ export const Auctions = (): JSX.Element => {
             (<Row gutter={[16, 16]}>
                 {[1, 2, 3, 4, 5, 6, 7].map(() => {
                     return (
-                        <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
+                        <Col xs={24} sm={12} md={8} lg={6}>
                             <Skeleton/>
                         </Col>
                     )
@@ -25,7 +25,7 @@ export const Auctions = (): JSX.Element => {
             (<Row gutter={[16, 16]}>
                 {auctions.map((auction: AuctionItem) => {
                     return (
-                        <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
+                        <Col xs={24} sm={12} md={8} lg={6}>
                             <Item item={auction} key={auction.id} loosing={auction.loosing}/>
                         </Col>
                     )
