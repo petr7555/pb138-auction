@@ -8,6 +8,7 @@ import axios from 'axios';
 import { showError, showSuccess } from "../api/apiCalls";
 import { userContextMain } from "../App";
 import { UserContext } from "../types/types";
+import { host, port } from "../constants";
 
 interface MatchParams {
     id: string;
@@ -20,7 +21,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
 
         const fetchItem = async (): Promise<void> => {
             try {
-                const res = await axios(`http://localhost:8080/api/auctions/${match.params.id}`);
+                const res = await axios(`http://${host}:${port}/api/auctions/${match.params.id}`);
                 setItem(res.data);
             } catch (error) {
                 showError(error);
@@ -35,7 +36,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
 
         const onFinish = async (values: Store): Promise<void> => {
             try {
-                await axios.post("http://localhost:8080/api/bids", {
+                await axios.post(`http://${host}:${port}/api/bids`, {
                     userId: userContext.userState.user.id,
                     auctionId: item.id,
                     amount: values.bid

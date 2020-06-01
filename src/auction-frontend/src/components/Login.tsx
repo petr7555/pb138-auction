@@ -6,6 +6,7 @@ import { showError } from "../api/apiCalls";
 import axios from 'axios';
 import { userContextMain } from "../App";
 import { UserState, UserContext } from "../types/types";
+import { host, port } from "../constants";
 
 const {Title} = Typography;
 
@@ -26,7 +27,7 @@ export const Login = (): JSX.Element => {
 
     const onFinishLogin = async (values: Store): Promise<void> => {
         try {
-            const res = await axios.post('http://localhost:8080/api/login', {
+            const res = await axios.post(`http://${host}:${port}/api/login`, {
                 name: values.username,
                 password: values.password,
             });
@@ -49,7 +50,7 @@ export const Login = (): JSX.Element => {
 
     const onFinishRegister = async (values: Store): Promise<void> => {
         try {
-            await axios.post('http://localhost:8080/api/register', {
+            await axios.post(`http://${host}:${port}/api/register`, {
                 name: values.username,
                 password: values.password
             });

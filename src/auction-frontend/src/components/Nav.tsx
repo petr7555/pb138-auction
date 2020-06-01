@@ -6,6 +6,7 @@ import { userContextMain } from "../App";
 import axios from 'axios';
 import { showError } from "../api/apiCalls";
 import { UserContext } from "../types/types";
+import { host, port } from "../constants";
 
 export const Nav = withRouter((props) => {
     const {location} = props;
@@ -14,7 +15,7 @@ export const Nav = withRouter((props) => {
 
     const logout = async (): Promise<void> => {
         try {
-            await axios.get('http://localhost:8080/api/logout');
+            await axios.get(`http://${host}:${port}/api/logout`);
             userContext.setUserState({
                 ...userContext.userState,
                 loggedIn: false

@@ -5,12 +5,13 @@ import { Item } from "./Item";
 import { userContextMain } from "../App";
 import { useSortedAuctions } from "../hooks/useSortedAuctions";
 import { UserContext } from "../types/types";
+import { host, port } from "../constants";
 
 export const ParticipatingAuctions = (): JSX.Element => {
     const userContext = useContext<UserContext>(userContextMain);
 
     const [{data, isLoading}, ] = useSortedAuctions(
-        `http://localhost:8080/api/auctions-taken-part/user/${userContext.userState.user.id}`,
+        `http://${host}:${port}/api/auctions-taken-part/user/${userContext.userState.user.id}`,
         [],
     );
 
