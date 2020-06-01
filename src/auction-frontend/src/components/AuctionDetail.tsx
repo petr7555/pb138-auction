@@ -20,7 +20,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
 
         const fetchItem = async (): Promise<void> => {
             try {
-                const res = await axios(`http://localhost:8080/api/auctions/${match.params.id}`);
+                const res = await axios(`${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/api/auctions/${match.params.id}`);
                 setItem(res.data);
             } catch (error) {
                 showError(error);
@@ -35,7 +35,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
 
         const onFinish = async (values: Store): Promise<void> => {
             try {
-                await axios.post("http://localhost:8080/api/bids", {
+                await axios.post(`${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/api/bids`, {
                     userId: userContext.userState.user.id,
                     auctionId: item.id,
                     amount: values.bid

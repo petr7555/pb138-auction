@@ -17,7 +17,7 @@ export const showSuccess = (msg: string): void => {
 
 export const createAuction = async (auction: NewAuction): Promise<void> => {
     try {
-        await axios.post("http://localhost:8080/api/auctions", auction);
+        await axios.post(`${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/api/auctions`, auction);
         showSuccess('Auction has been created');
     } catch (error) {
         showError(error);

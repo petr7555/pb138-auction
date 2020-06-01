@@ -14,7 +14,7 @@ export const Nav = withRouter((props) => {
 
     const logout = async (): Promise<void> => {
         try {
-            await axios.get('http://localhost:8080/api/logout');
+            await axios.get(`${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/api/logout`);
             userContext.setUserState({
                 ...userContext.userState,
                 loggedIn: false
