@@ -3,7 +3,6 @@ import { useDataApi } from "../api/useDataApi";
 import { useContext } from "react";
 import { userContextMain } from "../App";
 import { DataState, UserContext } from "../types/types";
-import { host, port } from "../constants";
 
 export const useSortedAuctions = (url: string, initialData: AuctionItem[]): [DataState, () => Promise<void>] => {
     const [{data, isLoading, isError}, doFetch] = useDataApi(
@@ -19,7 +18,7 @@ export const useSortedAuctions = (url: string, initialData: AuctionItem[]): [Dat
     const userContext = useContext<UserContext>(userContextMain);
 
     const [{data: participatingAuctions}] = useDataApi(
-        `http://${host}:${port}/api/auctions-taken-part/user/${userContext.userState.user.id}`,
+        `${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/api/auctions-taken-part/user/${userContext.userState.user.id}`,
         [],
     );
 

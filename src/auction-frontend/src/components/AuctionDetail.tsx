@@ -8,7 +8,6 @@ import axios from 'axios';
 import { showError, showSuccess } from "../api/apiCalls";
 import { userContextMain } from "../App";
 import { UserContext } from "../types/types";
-import { host, port } from "../constants";
 
 interface MatchParams {
     id: string;
@@ -21,7 +20,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
 
         const fetchItem = async (): Promise<void> => {
             try {
-                const res = await axios(`http://${host}:${port}/api/auctions/${match.params.id}`);
+                const res = await axios(`${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/api/auctions/${match.params.id}`);
                 setItem(res.data);
             } catch (error) {
                 showError(error);
@@ -36,7 +35,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
 
         const onFinish = async (values: Store): Promise<void> => {
             try {
-                await axios.post(`http://${host}:${port}/api/bids`, {
+                await axios.post(`${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/api/bids`, {
                     userId: userContext.userState.user.id,
                     auctionId: item.id,
                     amount: values.bid
@@ -51,7 +50,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
 
         return (
             item ?
-                <div className="auction-deatil">
+                <div className="auction-detail">
                     <Descriptions title={item.name}>
 
                         <Descriptions.Item label="Description">{item.description}</Descriptions.Item>
@@ -63,7 +62,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
                     </Descriptions>
                     {active && (item.user !== userContext.userState.user.name ?
                         (<div>
-                            <Divider className="auction-deatil__divider" type="horizontal"/>
+                            <Divider className="auction-detail__divider" type="horizontal"/>
                             <Form
                                 initialValues={{bid: item.actualPrice + 1}}
                                 onFinish={onFinish}>

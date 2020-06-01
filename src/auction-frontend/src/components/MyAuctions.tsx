@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Divider, Row } from "antd";
 import { ParticipatingAuctions } from "./ParticipatingAuctions";
-import { MyOfferings } from "./MyOfferings";
+import { MyOffers } from "./MyOffers";
 
 export const MyAuctions = (): JSX.Element => {
     return (
@@ -14,7 +14,7 @@ export const MyAuctions = (): JSX.Element => {
                     <Divider className="my-auctions-divider__divider" type="vertical"/>
                 </Col>
                 <Col xs={23} sm={11} md={15} lg={15} xxl={15}>
-                    <MyOfferings/>
+                    <MyOffers/>
                 </Col>
             </Row>
         </div>
