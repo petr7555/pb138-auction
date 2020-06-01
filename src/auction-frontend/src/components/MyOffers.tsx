@@ -7,7 +7,7 @@ import { userContextMain } from "../App";
 import { useSortedAuctions } from "../hooks/useSortedAuctions";
 import { UserContext } from "../types/types";
 
-export const MyOfferings = (): JSX.Element => {
+export const MyOffers = (): JSX.Element => {
     const userContext = useContext<UserContext>(userContextMain);
 
     const [{data, isLoading}, doFetch] = useSortedAuctions(
@@ -17,7 +17,7 @@ export const MyOfferings = (): JSX.Element => {
 
     return (
         <div>
-            <Divider><h2>My offerings</h2></Divider>
+            <Divider><h2>My offers</h2></Divider>
             <DrawerForm refresh={doFetch}/>
             {isLoading ? (
                 <Row gutter={[16, 16]}>

@@ -50,10 +50,9 @@ export const DrawerForm = ({refresh}: DrawerFormParam): JSX.Element => {
                 title="Create a new auction"
                 onClose={onClose}
                 visible={visible}
-                bodyStyle={{paddingBottom: 80}}
                 footer={
-                    <div style={{textAlign: 'right'}}>
-                        <Button onClick={onClose} style={{marginRight: 8}}>
+                    <div className="drawer-form__buttons">
+                        <Button className="drawer-form__buttons__cancel" onClick={onClose}>
                             Cancel
                         </Button>
                         <Button onClick={form.submit} type="primary">
@@ -62,7 +61,7 @@ export const DrawerForm = ({refresh}: DrawerFormParam): JSX.Element => {
                     </div>
                 }
             >
-                <Form form={form} onFinish={onFinish} layout="vertical" hideRequiredMark>
+                <Form className="drawer-form" form={form} onFinish={onFinish} layout="vertical" hideRequiredMark>
                     <Row gutter={16}>
                         <Col span={12}>
                             <Form.Item
