@@ -51,7 +51,7 @@ export const AuctionDetail = ({match}: RouteComponentProps<MatchParams>): JSX.El
         return (
             item ?
                 <div className="auction-deatil">
-                    <Descriptions title={item.description}>
+                    <Descriptions title={item.name}>
 
                         <Descriptions.Item label="Description">{item.description}</Descriptions.Item>
                         <Descriptions.Item label="Seller">{item.user}</Descriptions.Item>
