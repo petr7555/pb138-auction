@@ -12,8 +12,6 @@ RUN cargo install --path .
 FROM debian:stable-slim
 RUN apt-get update && apt-get install -y libpq-dev
 COPY --from=builder /usr/local/cargo/bin/auction-api /usr/local/bin/auction-api
-COPY localhost-key.pem .
-COPY localhost.pem .
 
 EXPOSE 8080
 
