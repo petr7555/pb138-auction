@@ -5,4 +5,4 @@ setup:
 build:
   docker:
     frontend: src/auction-frontend/Dockerfile
-    backend: src/auction-backend/Dockerfile
+    backend: src/auction-api/Dockerfile
