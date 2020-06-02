@@ -112,7 +112,7 @@ pub fn insert_new_bid(conn: &PgConnection, new_bid: &NewBid) -> Result<Bid, dies
 
     let highest_bid_res = bids::dsl::bids
         .filter(bids::auction_id.eq(new_bid.auction_id))
-        .order((bids::amount, bids::created_at))
+        .order((bids::amount.desc(), bids::created_at))
         .first::<Bid>(conn)
         .optional()?;
 
