@@ -6,7 +6,7 @@ import { useSortedAuctions } from "../hooks/useSortedAuctions";
 
 export const Auctions = (): JSX.Element => {
     const [{data: auctions, isLoading}, ] = useSortedAuctions(
-        `${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/api/auctions`,
+        `${process.env.REACT_APP_HOST}/api/auctions`,
         [],
     );
 
