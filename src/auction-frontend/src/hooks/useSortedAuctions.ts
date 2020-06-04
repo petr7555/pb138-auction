@@ -18,7 +18,7 @@ export const useSortedAuctions = (url: string, initialData: AuctionItem[]): [Dat
     const userContext = useContext<UserContext>(userContextMain);
 
     const [{data: participatingAuctions}] = useDataApi(
-        `${process.env.REACT_APP_HOST}/api/auctions-taken-part/user/${userContext.userState.user.id}`,
+        `/api/auctions-taken-part/user/${userContext.userState.user.id}`,
         [],
     );
 

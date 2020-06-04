@@ -23,6 +23,11 @@
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .ts --ext .tsx"
   },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8080/api"
+    }
+  },
   "eslintConfig": {
     "extends": "react-app"
   },

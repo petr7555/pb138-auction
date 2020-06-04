@@ -26,7 +26,7 @@ export const Login = (): JSX.Element => {
 
     const onFinishLogin = async (values: Store): Promise<void> => {
         try {
-            const res = await axios.post(`${process.env.REACT_APP_HOST}/api/login`, {
+            const res = await axios.post(`/api/login`, {
                 name: values.username,
                 password: values.password,
             });
@@ -49,7 +49,7 @@ export const Login = (): JSX.Element => {
 
     const onFinishRegister = async (values: Store): Promise<void> => {
         try {
-            await axios.post(`${process.env.REACT_APP_HOST}/api/register`, {
+            await axios.post(`/api/register`, {
                 name: values.username,
                 password: values.password
             });

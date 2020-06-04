@@ -11,7 +11,7 @@ export const MyOffers = (): JSX.Element => {
     const userContext = useContext<UserContext>(userContextMain);
 
     const [{data, isLoading}, doFetch] = useSortedAuctions(
-        `${process.env.REACT_APP_HOST}/api/auctions/user/${userContext.userState.user.id}`,
+        `/api/auctions/user/${userContext.userState.user.id}`,
         [],
     );
 

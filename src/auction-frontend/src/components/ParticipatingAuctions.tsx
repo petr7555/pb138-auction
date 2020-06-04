@@ -10,7 +10,7 @@ export const ParticipatingAuctions = (): JSX.Element => {
     const userContext = useContext<UserContext>(userContextMain);
 
     const [{data, isLoading}, ] = useSortedAuctions(
-        `${process.env.REACT_APP_HOST}/api/auctions-taken-part/user/${userContext.userState.user.id}`,
+        `/api/auctions-taken-part/user/${userContext.userState.user.id}`,
         [],
     );
 
