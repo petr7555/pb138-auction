@@ -1,4 +1,4 @@
-A team school project for subject PB138, created in spring semester 2020.
+A team school project for subject PB138, created in spring semester 2020.  
 Running on [Heroku](https://pb138-auction-frontend.herokuapp.com/).
 
 Collaborators: 
