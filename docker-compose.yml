@@ -10,6 +10,7 @@ services:
             - 8080:8080
         restart: always
         environment:
+            - PORT=8080
             - DATABASE_URL=postgres://postgres:password@db/postgres
 
     auction-frontend:
