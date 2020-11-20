@@ -1,5 +1,7 @@
 A team school project for subject PB138, created in spring semester 2020.  
 Running on [Heroku](https://pb138-auction-frontend.herokuapp.com/), login: _demo_, password: _demo_.
+This repository is split for deployment purposes to [frontend](https://github.com/petr7555/auction-frontend/) and [backend](https://github.com/petr7555/auction-api/) part.
+Commits to this repository do not affect deployed version.
 
 Collaborators: 
  * [Petr Janík](https://github.com/petr7555/)
