@@ -1,0 +1,8 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: DATABASE
+build:
+  docker:
+    frontend: src/auction-frontend/Dockerfile
+    backend: src/auction-api/Dockerfile
