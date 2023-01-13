@@ -1,6 +1,6 @@
 A team school project for subject PB138, created in spring semester 2020.
 
-Running on https://pb138-auction-fe.onrender.com, login: _demo_, password: _demo_.
+Running on https://pb138-auction-fe.onrender.com, login: _Joe_, password: _1234_.
 
 It uses API running on https://pb138-auction-api.onrender.com.
 The API uses PostgreSQL database running on https://www.elephantsql.com/.
