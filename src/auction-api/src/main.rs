@@ -91,6 +91,7 @@ async fn main() -> std::io::Result<()> {
     let connspec = std::env::var("DATABASE_URL").expect("DATABASE_URL");
     let manager = ConnectionManager::<PgConnection>::new(connspec);
     let pool = r2d2::Pool::builder()
+        .max_size(1)
         .build(manager)
         .expect("Failed to create pool.");
 
